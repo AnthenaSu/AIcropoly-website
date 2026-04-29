@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-parchment: #F4F6FB;
+  --color-card: #E9EDF5;
+  --color-border: #D2D8E6;
+
+  --color-ink: #1C2230;
+  --color-ink-muted: #5B6475;
+
+  /* blue/grey accent palette */
+  --color-buckram: #7B8FC7;
+  --color-buckram-dark: #5B70A8;
+  --color-ruskin: #7FA8A0;
+  --color-ruskin-dark: #5C8078;
+  --color-roycroft: #F2A7A0;
+  --color-bunglehouse: #8499A8;
+  --color-bunglehouse-dark: #5C7284;
+
+  --color-primary: #7C8CFF;
+  --color-primary-dark: #5A6BE0;
+
+  --color-accent: #F2A7A0;
+  --color-accent-dark: #D98780;
+
+  --color-secondary: #8FAFA3;
+  --color-secondary-dark: #6F8E84;
+
+  --font-display: 'DM Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
