@@ -35,6 +35,10 @@ const TEAM = [
   { name: '[Name]', role: 'Head of AI',         dept: 'Computer Science' },
 ]
 
+const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
+const sb = { paddingBottom: '10rem' }
+
 export default function AboutUs() {
   return (
     <main className="bg-parchment">
@@ -55,7 +59,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Mission ── */}
-      <section className="py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
+      <section className={PX} style={sy}>
         <div className="text-center">
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-10">
             <Tag>Our Mission</Tag>
@@ -70,33 +74,34 @@ export default function AboutUs() {
       </section>
 
       {/* ── Team grid ── */}
-      <section className="pb-40 md:pb-60 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-        <div>
-          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
-            <Tag>The Team</Tag>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {TEAM.map((member, i) => (
-              <motion.div
-                key={i}
-                variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="group cursor-default text-center"
-              >
-                <ImgCard
-                  label={`${member.name} portrait`}
-                  className="aspect-[3/4] mb-7 transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-                <p className="font-display font-semibold text-ink text-xl mb-2 tracking-tight">{member.name}</p>
-                <p className="font-mono text-xs tracking-widest uppercase text-buckram mb-1">{member.role}</p>
-                <p className="font-mono text-xs text-ink-muted">{member.dept}</p>
-              </motion.div>
-            ))}
-          </div>
+      <section className={PX} style={sb}>
+        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
+          <Tag>The Team</Tag>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {TEAM.map((member, i) => (
+            <motion.div
+              key={i}
+              variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+              className="group cursor-default text-center"
+            >
+              <ImgCard
+                label={`${member.name} portrait`}
+                className="aspect-[3/4] mb-7 transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+              <p className="font-display font-semibold text-ink text-xl mb-2 tracking-tight">{member.name}</p>
+              <p className="font-mono text-xs tracking-widest uppercase text-buckram mb-1">{member.role}</p>
+              <p className="font-mono text-xs text-ink-muted">{member.dept}</p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* ── Core values ── */}
-      <section className="bg-ink py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48 overflow-hidden relative">
+      <section
+        className={`bg-ink overflow-hidden relative ${PX}`}
+        style={{ paddingTop: '10rem', paddingBottom: '10rem' }}
+      >
         <div className="absolute -left-40 top-10 w-[500px] h-[500px] rounded-full bg-ruskin/10 blur-3xl" />
         <div className="relative">
           <div className="grid md:grid-cols-3 gap-16 md:gap-20 text-center">
@@ -118,38 +123,36 @@ export default function AboutUs() {
       </section>
 
       {/* ── Founding story ── */}
-      <section className="py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-        <div>
-          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
-            <Tag>Founding Story</Tag>
+      <section className={PX} style={sy}>
+        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
+          <Tag>Founding Story</Tag>
+        </motion.div>
+        <div className="grid md:grid-cols-2 gap-20 items-start">
+          <ImgCard label="Lab / prototype photo" className="aspect-[4/3] sticky top-24" />
+          <motion.div
+            variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="flex flex-col gap-12"
+          >
+            <p className="font-display font-semibold text-ink text-3xl md:text-4xl leading-tight tracking-tight">
+              It started with a question in a UNSW acoustics lab.
+            </p>
+            <p className="text-base text-ink-muted leading-relaxed">
+              [Your founding story in 2–3 sentences.]
+            </p>
+            <div className="flex flex-col gap-10 border-l-2 border-border pl-10">
+              {[
+                { date: 'Q1 2025', event: 'Material science research begins at UNSW' },
+                { date: 'Q2 2025', event: 'First SDR + drone prototype tested in field' },
+                { date: 'Q3 2025', event: 'AI model trained on defect classifications' },
+                { date: 'Q1 2026', event: 'Pilot conversation with energy operator' },
+              ].map(({ date, event }) => (
+                <div key={date}>
+                  <p className="font-mono text-xs text-buckram mb-2">{date}</p>
+                  <p className="text-base text-ink-muted">{event}</p>
+                </div>
+              ))}
+            </div>
           </motion.div>
-          <div className="grid md:grid-cols-2 gap-20 items-start">
-            <ImgCard label="Lab / prototype photo" className="aspect-[4/3] sticky top-24" />
-            <motion.div
-              variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="flex flex-col gap-12"
-            >
-              <p className="font-display font-semibold text-ink text-3xl md:text-4xl leading-tight tracking-tight">
-                It started with a question in a UNSW acoustics lab.
-              </p>
-              <p className="text-base text-ink-muted leading-relaxed">
-                [Your founding story in 2–3 sentences.]
-              </p>
-              <div className="flex flex-col gap-10 border-l-2 border-border pl-10">
-                {[
-                  { date: 'Q1 2025', event: 'Material science research begins at UNSW' },
-                  { date: 'Q2 2025', event: 'First SDR + drone prototype tested in field' },
-                  { date: 'Q3 2025', event: 'AI model trained on defect classifications' },
-                  { date: 'Q1 2026', event: 'Pilot conversation with energy operator' },
-                ].map(({ date, event }) => (
-                  <div key={date}>
-                    <p className="font-mono text-xs text-buckram mb-2">{date}</p>
-                    <p className="text-base text-ink-muted">{event}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
         </div>
       </section>
 

@@ -20,14 +20,6 @@ function Tag({ children, color = 'buckram' }) {
   )
 }
 
-function SectionLabel({ children, dark = false }) {
-  return (
-    <p className={`font-display font-bold text-2xl md:text-3xl tracking-tight mb-12 uppercase ${dark ? 'text-parchment' : 'text-ink'}`}>
-      {children}
-    </p>
-  )
-}
-
 function ImgCard({ label, className = '' }) {
   return (
     <div className={`relative overflow-hidden rounded-3xl ${className}`}>
@@ -49,6 +41,40 @@ function DarkImgCard({ label, className = '' }) {
     </div>
   )
 }
+
+function StepIndicator({ active, dark = false }) {
+  const steps = ['0.1', '0.2', '0.3']
+  const base = dark ? 'text-parchment/30' : 'text-ink-muted/30'
+  const activeColor = dark ? 'text-parchment' : 'text-ink'
+  const lineColor = dark ? 'bg-parchment/15' : 'bg-border'
+  return (
+    <div className="flex items-center mb-16">
+      {steps.map((s, i) => (
+        <div key={s} className="flex items-center">
+          {i > 0 && <div className={`h-px w-12 md:w-20 mx-3 ${lineColor}`} />}
+          <span className={`font-mono text-xs tracking-widest ${s === active ? activeColor : base}`}>
+            {s === active ? `[${s}]` : s}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function PillButton({ children, dark = false }) {
+  const style = dark
+    ? 'border-parchment/30 text-parchment/60 hover:border-parchment hover:text-parchment'
+    : 'border-ink/30 text-ink/60 hover:border-ink hover:text-ink'
+  return (
+    <button className={`border rounded-full px-6 py-2.5 font-mono text-xs tracking-widest uppercase transition-colors ${style}`}>
+      {children}
+    </button>
+  )
+}
+
+const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
+const syDark = { paddingTop: '10rem', paddingBottom: '10rem' }
 
 export default function Product() {
   return (
@@ -73,155 +99,199 @@ export default function Product() {
       </section>
 
       {/* ── How It Works ── */}
-      <section className="py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-        <div>
-          <div className="mb-16">
-            <SectionLabel>How It Works</SectionLabel>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { num: '01', label: 'Fly',      color: 'buckram',     img: 'Drone traversing pipeline route',  desc: 'Drone follows pipeline at optimal altitude.' },
-              { num: '02', label: 'Listen',   color: 'ruskin',      img: 'SDR capturing acoustic data',       desc: 'SDR captures full-spectrum IQ data from pipe wall.' },
-              { num: '03', label: 'Classify', color: 'bunglehouse', img: 'AI spectrogram analysis',           desc: 'AI classifies defect type from time-frequency data.' },
-              { num: '04', label: 'Report',   color: 'buckram',     img: 'Geo-tagged defect map',             desc: 'Geo-tagged defect map delivered in 24 h.' },
-            ].map((s, i) => (
-              <motion.div
-                key={i}
-                variants={rise(i * 0.08)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="group cursor-default text-center"
-              >
-                <ImgCard label={s.img} className="aspect-[3/4] mb-7 transition-transform duration-500 group-hover:scale-[1.02]" />
-                <Tag color={s.color}>{s.num} — {s.label}</Tag>
-                <p className="text-sm text-ink-muted leading-relaxed mt-4">{s.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Demo ── */}
-      <section className="pb-20 md:pb-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-        <div>
-          <div className="relative rounded-3xl overflow-hidden">
-            <ImgCard label="3D system demo — replace with Spline or video embed" className="w-full aspect-video" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 rounded-full bg-parchment/90 flex items-center justify-center shadow-lg">
-                <div className="w-0 h-0 border-t-[10px] border-b-[10px] border-l-[18px] border-t-transparent border-b-transparent border-l-ink ml-1" />
-              </div>
+      <section className={PX} style={sy}>
+        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-5">
+          <Tag>System Overview</Tag>
+        </motion.div>
+        <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start mt-10">
+          <motion.h2
+            variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight"
+          >
+            How It<br />Works
+          </motion.h2>
+          <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div className="grid grid-cols-2 gap-x-10 gap-y-10">
+              {[
+                { num: '01', label: 'Fly',      color: 'buckram',     desc: 'Drone follows pipeline corridor at optimal altitude, autonomously.' },
+                { num: '02', label: 'Excite',   color: 'ruskin',      desc: 'RF signal activates the passive sensor film bonded to the pipe wall.' },
+                { num: '03', label: 'Classify', color: 'bunglehouse', desc: 'AI classifies defect type and severity from acoustic response data.' },
+                { num: '04', label: 'Report',   color: 'buckram',     desc: 'Geo-tagged crack map delivered within 24 hours.' },
+              ].map((s, i) => (
+                <div key={i}>
+                  <Tag color={s.color}>{s.num} — {s.label}</Tag>
+                  <p className="text-sm text-ink-muted leading-relaxed mt-4">{s.desc}</p>
+                </div>
+              ))}
             </div>
-          </div>
-          <p className="font-mono text-xs text-ink-muted mt-6 tracking-widest uppercase text-center">End-to-end system demo</p>
+          </motion.div>
         </div>
+
+        {/* Offset image */}
+        <motion.div
+          variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+        >
+          <ImgCard label="End-to-end system diagram" className="aspect-video rounded-3xl" />
+        </motion.div>
       </section>
 
-      {/* ── Material Science ── */}
-      <section className="bg-ink py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48 overflow-hidden relative">
+      {/* ── Layer 01: Material Science ── */}
+      <section className={`bg-ink overflow-hidden relative ${PX}`} style={syDark}>
         <div className="absolute -right-40 -top-40 w-[500px] h-[500px] rounded-full bg-buckram/12 blur-3xl" />
         <div className="relative">
-          <div className="grid md:grid-cols-2 gap-20 items-start">
-            <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <div className="mb-6"><Tag color="parchment">Layer 01</Tag></div>
-              <SectionLabel dark>Material Science</SectionLabel>
-              <p className="font-display font-semibold text-parchment text-3xl md:text-4xl leading-tight tracking-tight mb-10">
-                Every defect has a sound.
+          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <StepIndicator active="0.1" dark />
+          </motion.div>
+          <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
+            <motion.h2
+              variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+              className="font-display font-semibold text-parchment text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight"
+            >
+              Material<br />Science
+            </motion.h2>
+            <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+              <p className="text-base text-parchment/50 leading-relaxed mb-6">
+                Pipeline defects alter how a pipe wall responds to acoustic excitation. We characterised these
+                responses across material samples to give our AI a physics-grounded training foundation.
               </p>
-              <p className="text-base text-parchment/50 leading-relaxed mb-16">
-                Pipeline defects alter how a pipe wall responds to acoustic excitation. We characterised these responses across material samples to give our AI a physics-grounded training foundation.
+              <p className="text-base text-parchment/50 leading-relaxed mb-10">
+                Every defect type — corrosion, stress cracking, hydrogen embrittlement — has a distinct acoustic
+                signature. Our sensor film captures it passively, at any time.
               </p>
-              <div className="grid grid-cols-2 gap-10">
+              <div className="grid grid-cols-2 gap-8 mb-12">
                 {[
-                  { val: '[X]',     label: 'Defect types' },
+                  { val: '[X]',     label: 'Defect types characterised' },
                   { val: '[X]',     label: 'Samples tested' },
                   { val: '[X] kHz', label: 'Frequency range' },
-                  { val: '[X]%',    label: 'Repeatability' },
+                  { val: '[X]%',    label: 'Signal repeatability' },
                 ].map((s, i) => (
                   <div key={i}>
-                    <p className="font-display font-bold text-buckram text-5xl mb-3 leading-none tracking-tight">{s.val}</p>
+                    <p className="font-display font-bold text-buckram text-4xl mb-2 leading-none tracking-tight">{s.val}</p>
                     <p className="font-mono text-xs text-parchment/30">{s.label}</p>
                   </div>
                 ))}
               </div>
-            </motion.div>
-
-            <motion.div
-              variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="flex flex-col gap-6 sticky top-24"
-            >
-              <DarkImgCard label="Acoustic signature diagram" className="aspect-square" />
-              <DarkImgCard label="Lab sample / material cross-section" className="aspect-[4/3]" />
+              <div className="flex gap-3">
+                <PillButton dark>Details</PillButton>
+                <PillButton dark>Research</PillButton>
+              </div>
             </motion.div>
           </div>
+          {/* Offset image */}
+          <motion.div
+            variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+          >
+            <DarkImgCard label="Acoustic signature diagram / lab sample cross-section" className="aspect-video rounded-3xl" />
+          </motion.div>
         </div>
       </section>
 
-      {/* ── Drone + SDR ── */}
-      <section className="py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48">
-        <div>
-          <div className="mb-6"><Tag>Layer 02</Tag></div>
-          <SectionLabel>Drone + SDR</SectionLabel>
-
-          <ImgCard label="Drone + SDR hardware — full-bleed" className="w-full aspect-[16/7] mb-20" />
-
-          <div className="grid md:grid-cols-3 gap-16">
-            {[
-              { title: 'Acoustic Principle', body: 'Drone emits a controlled signal. Wall anomalies produce measurable distortions in the reflected wavefield.', color: 'buckram' },
-              { title: 'IQ Data Capture',   body: 'SDR captures raw IQ data at [X] MSPS — preserving full amplitude, phase, and frequency information.', color: 'bunglehouse' },
-              { title: 'Autonomous Flight', body: 'Maintains optimal standoff geometry via onboard LiDAR and GPS — no manual control required.', color: 'ruskin' },
-            ].map((item, i) => (
-              <motion.div key={i} variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                <Tag color={item.color}>{item.title}</Tag>
-                <p className="text-base text-ink-muted leading-relaxed mt-6">{item.body}</p>
-              </motion.div>
-            ))}
-          </div>
+      {/* ── Layer 02: Drone + SDR ── */}
+      <section className={PX} style={sy}>
+        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <StepIndicator active="0.2" />
+        </motion.div>
+        <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
+          <motion.h2
+            variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight"
+          >
+            Drone<br />+ SDR
+          </motion.h2>
+          <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p className="text-base text-ink-muted leading-relaxed mb-6">
+              The drone emits a controlled RF signal that remotely activates the passive sensor film attached
+              to the pipe wall. No physical contact. No pipeline shutdown.
+            </p>
+            <p className="text-base text-ink-muted leading-relaxed mb-10">
+              The on-board SDR captures the acoustic response at full fidelity — preserving amplitude, phase,
+              and frequency data for downstream AI processing.
+            </p>
+            <div className="flex flex-col gap-8 mb-12">
+              {[
+                { label: 'Acoustic Excitation', body: 'Wall anomalies produce measurable distortions in the reflected wavefield — detectable at <1mm crack depth.', color: 'buckram' },
+                { label: 'IQ Data Capture',     body: 'SDR captures raw IQ data at [X] MSPS — preserving full signal information for AI inference.', color: 'bunglehouse' },
+                { label: 'Autonomous Flight',   body: 'Onboard LiDAR + GPS maintains optimal standoff geometry. No pilot required.', color: 'ruskin' },
+              ].map((item, i) => (
+                <div key={i}>
+                  <Tag color={item.color}>{item.label}</Tag>
+                  <p className="text-sm text-ink-muted leading-relaxed mt-3">{item.body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-3">
+              <PillButton>Details</PillButton>
+              <PillButton>Video</PillButton>
+            </div>
+          </motion.div>
         </div>
+        {/* Offset image */}
+        <motion.div
+          variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+        >
+          <ImgCard label="Drone + SDR hardware in field" className="aspect-video rounded-3xl" />
+        </motion.div>
       </section>
 
-      {/* ── AI Analysis ── */}
-      <section className="bg-ink py-20 md:py-32 px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-48 overflow-hidden relative">
+      {/* ── Layer 03: AI Analysis ── */}
+      <section className={`bg-ink overflow-hidden relative ${PX}`} style={syDark}>
         <div className="absolute -left-40 -bottom-40 w-[500px] h-[500px] rounded-full bg-bunglehouse/10 blur-3xl" />
         <div className="relative">
-          <div className="grid md:grid-cols-2 gap-20 items-start">
-            <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <div className="mb-6"><Tag color="parchment">Layer 03</Tag></div>
-              <SectionLabel dark>AI Analysis</SectionLabel>
-              <p className="font-display font-semibold text-parchment text-3xl md:text-4xl leading-tight tracking-tight mb-12">
-                From raw signal to actionable intelligence.
+          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <StepIndicator active="0.3" dark />
+          </motion.div>
+          <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
+            <motion.h2
+              variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+              className="font-display font-semibold text-parchment text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight"
+            >
+              AI<br />Analysis
+            </motion.h2>
+            <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+              <p className="text-base text-parchment/50 leading-relaxed mb-10">
+                Raw IQ data is transformed into time-frequency spectrograms, then classified by our trained
+                model. Output is a colour-coded pipeline health map with GPS-tagged defect locations.
               </p>
-              <div className="flex flex-col gap-12">
+              <div className="flex flex-col gap-8 mb-12">
                 {[
-                  { step: '01 — Preprocessing', body: 'IQ data converted to time-frequency spectrograms via Short-Time Fourier Transform.', color: 'parchment' },
+                  { step: '01 — Preprocessing', body: 'IQ data → time-frequency spectrograms via Short-Time Fourier Transform.', color: 'parchment' },
                   { step: '02 — Inference',      body: '[Model]. Trained on [X] labelled spectrograms across [X] defect classes.', color: 'parchment' },
-                  { step: '03 — Output',         body: 'Defect type, severity, and GPS location as a colour-coded pipeline health map.', color: 'parchment' },
+                  { step: '03 — Output',         body: 'Defect type, severity, and GPS location delivered as a pipeline health map.', color: 'parchment' },
                 ].map((item, i) => (
                   <div key={i}>
                     <Tag color={item.color}>{item.step}</Tag>
-                    <p className="text-base text-parchment/50 leading-relaxed mt-5">{item.body}</p>
+                    <p className="text-sm text-parchment/40 leading-relaxed mt-3">{item.body}</p>
                   </div>
                 ))}
               </div>
-            </motion.div>
-
-            <motion.div
-              variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="flex flex-col gap-6 sticky top-24"
-            >
-              <DarkImgCard label="Time-frequency spectrogram — AI output" className="w-full aspect-video" />
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-4 mb-12">
                 {[
                   { val: '[X]%',   label: 'Accuracy',      color: 'text-buckram' },
                   { val: '[X] ms', label: 'Latency',        color: 'text-bunglehouse' },
                   { val: '[X]',    label: 'Defect classes', color: 'text-ruskin' },
                 ].map((s, i) => (
-                  <div key={i} className="text-center py-8 bg-parchment/10 rounded-2xl">
+                  <div key={i} className="text-center py-7 bg-parchment/5 rounded-2xl">
                     <p className={`font-display font-bold text-3xl mb-2 leading-none tracking-tight ${s.color}`}>{s.val}</p>
-                    <p className="font-mono text-xs text-parchment/40">{s.label}</p>
+                    <p className="font-mono text-xs text-parchment/30">{s.label}</p>
                   </div>
                 ))}
               </div>
-              <DarkImgCard label="Pipeline health map / dashboard output" className="w-full aspect-[4/3]" />
+              <div className="flex gap-3">
+                <PillButton dark>Details</PillButton>
+                <PillButton dark>Live Demo</PillButton>
+              </div>
             </motion.div>
           </div>
+          {/* Offset image */}
+          <motion.div
+            variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+          >
+            <DarkImgCard label="AI spectrogram output / pipeline health map" className="aspect-video rounded-3xl" />
+          </motion.div>
         </div>
       </section>
 
