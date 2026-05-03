@@ -45,7 +45,7 @@ const COMPETITORS = [
   { method: 'PipeGuard AI',      noShutdown: true,  h2crack: true,  ai: true,  continuous: true,  cost: 'Low'       },
 ]
 
-const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
 const sy = { paddingTop: '9rem', paddingBottom: '9rem' }
 const syDark = { paddingTop: '10rem', paddingBottom: '10rem' }
 const sb = { paddingBottom: '9rem' }
@@ -72,7 +72,7 @@ export default function Market() {
       </section>
 
       {/* ── Problem ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="mb-20 text-center">
           <Tag>The Problem</Tag>
@@ -95,14 +95,14 @@ export default function Market() {
       </section>
 
       {/* ── Full-bleed image ── */}
-      <section className={PX} style={sb}>
+      <section className={WRAP} style={sb}>
         <ImgCard label="Hydrogen embrittlement micro-crack cross-section" className="w-full aspect-[21/9]" />
       </section>
 
       {/* ── Why Now ── */}
-      <section className={`bg-ink overflow-hidden relative ${PX}`} style={syDark}>
+      <section className="bg-ink overflow-hidden relative" style={syDark}>
         <div className="absolute -left-32 -top-32 w-[500px] h-[500px] rounded-full bg-buckram/8 blur-3xl" />
-        <div className="relative">
+        <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="mb-20 text-center">
             <Tag color="parchment">Why Now</Tag>
@@ -130,9 +130,9 @@ export default function Market() {
       </section>
 
       {/* ── Market Size ── */}
-      <section className={`overflow-hidden relative ${PX}`} style={sy}>
+      <section className="overflow-hidden relative" style={sy}>
         <div className="absolute -right-32 -bottom-32 w-[500px] h-[500px] rounded-full bg-buckram/8 blur-3xl" />
-        <div className="relative">
+        <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="mb-24 text-center">
             <Tag>Market Size</Tag>
@@ -154,7 +154,8 @@ export default function Market() {
       </section>
 
       {/* ── Competitive table ── */}
-      <section className={`bg-card/40 ${PX}`} style={sy}>
+      <section className="bg-card/40" style={sy}>
+        <div className={WRAP}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="mb-20 text-center">
           <Tag>Competitive Landscape</Tag>
@@ -199,12 +200,13 @@ export default function Market() {
             </tbody>
           </table>
         </motion.div>
+        </div>
       </section>
 
       {/* ── Value proposition ── */}
-      <section className={`bg-buckram overflow-hidden relative ${PX}`} style={syDark}>
+      <section className="bg-buckram overflow-hidden relative" style={syDark}>
         <div className="absolute -left-40 -top-40 w-[500px] h-[500px] rounded-full bg-parchment/10 blur-3xl" />
-        <div className="text-center relative">
+        <div className={`text-center relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-20">
             <Tag color="parchment">Value Proposition</Tag>
           </motion.div>
@@ -218,7 +220,7 @@ export default function Market() {
       </section>
 
       {/* ── Business model ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="mb-24 text-center">
           <Tag>Business Model</Tag>
@@ -275,7 +277,7 @@ export default function Market() {
       </section>
 
       {/* ── CTA ── */}
-      <section className={PX} style={{ paddingTop: '7rem', paddingBottom: '7rem' }}>
+      <section className={WRAP} style={{ paddingTop: '7rem', paddingBottom: '7rem' }}>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-10 text-center">
           <p className="font-display font-semibold text-ink text-2xl md:text-3xl tracking-tight">See the technology behind the numbers.</p>
           <Link

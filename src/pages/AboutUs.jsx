@@ -35,7 +35,7 @@ const TEAM = [
   { name: '[Name]', role: 'Head of AI',         dept: 'Computer Science' },
 ]
 
-const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
 const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
 const sb = { paddingBottom: '10rem' }
 
@@ -59,7 +59,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Mission ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <div className="text-center">
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-10">
             <Tag>Our Mission</Tag>
@@ -74,7 +74,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Team grid ── */}
-      <section className={PX} style={sb}>
+      <section className={WRAP} style={sb}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
           <Tag>The Team</Tag>
         </motion.div>
@@ -99,11 +99,11 @@ export default function AboutUs() {
 
       {/* ── Core values ── */}
       <section
-        className={`bg-ink overflow-hidden relative ${PX}`}
+        className="bg-ink overflow-hidden relative"
         style={{ paddingTop: '10rem', paddingBottom: '10rem' }}
       >
         <div className="absolute -left-40 top-10 w-[500px] h-[500px] rounded-full bg-ruskin/10 blur-3xl" />
-        <div className="relative">
+        <div className={`relative ${WRAP}`}>
           <div className="grid md:grid-cols-3 gap-16 md:gap-20 text-center">
             {[
               { label: 'Precision',      body: 'Every output held to engineering-grade standards.' },
@@ -123,7 +123,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Founding story ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-16 text-center">
           <Tag>Founding Story</Tag>
         </motion.div>

@@ -72,7 +72,7 @@ function PillButton({ children, dark = false }) {
   )
 }
 
-const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
 const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
 const syDark = { paddingTop: '10rem', paddingBottom: '10rem' }
 
@@ -99,7 +99,8 @@ export default function Product() {
       </section>
 
       {/* ── How It Works ── */}
-      <section className={PX} style={sy}>
+      <section style={sy}>
+        <div className={WRAP}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-5">
           <Tag>System Overview</Tag>
         </motion.div>
@@ -130,16 +131,17 @@ export default function Product() {
         {/* Offset image */}
         <motion.div
           variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+          className="mt-16 ml-[38%] -mr-12 md:-mr-24"
         >
           <ImgCard label="End-to-end system diagram" className="aspect-video rounded-3xl" />
         </motion.div>
+        </div>
       </section>
 
       {/* ── Layer 01: Material Science ── */}
-      <section className={`bg-ink overflow-hidden relative ${PX}`} style={syDark}>
+      <section className="bg-ink overflow-hidden relative" style={syDark}>
         <div className="absolute -right-40 -top-40 w-[500px] h-[500px] rounded-full bg-buckram/12 blur-3xl" />
-        <div className="relative">
+        <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <StepIndicator active="0.1" dark />
           </motion.div>
@@ -181,7 +183,7 @@ export default function Product() {
           {/* Offset image */}
           <motion.div
             variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+            className="mt-16 ml-[38%] -mr-12 md:-mr-24"
           >
             <DarkImgCard label="Acoustic signature diagram / lab sample cross-section" className="aspect-video rounded-3xl" />
           </motion.div>
@@ -189,7 +191,8 @@ export default function Product() {
       </section>
 
       {/* ── Layer 02: Drone + SDR ── */}
-      <section className={PX} style={sy}>
+      <section style={sy}>
+        <div className={WRAP}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <StepIndicator active="0.2" />
         </motion.div>
@@ -230,16 +233,17 @@ export default function Product() {
         {/* Offset image */}
         <motion.div
           variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+          className="mt-16 ml-[38%] -mr-12 md:-mr-24"
         >
           <ImgCard label="Drone + SDR hardware in field" className="aspect-video rounded-3xl" />
         </motion.div>
+        </div>
       </section>
 
       {/* ── Layer 03: AI Analysis ── */}
-      <section className={`bg-ink overflow-hidden relative ${PX}`} style={syDark}>
+      <section className="bg-ink overflow-hidden relative" style={syDark}>
         <div className="absolute -left-40 -bottom-40 w-[500px] h-[500px] rounded-full bg-bunglehouse/10 blur-3xl" />
-        <div className="relative">
+        <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <StepIndicator active="0.3" dark />
           </motion.div>
@@ -288,7 +292,7 @@ export default function Product() {
           {/* Offset image */}
           <motion.div
             variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="mt-16 ml-[38%] -mr-8 sm:-mr-16 md:-mr-24 lg:-mr-32 xl:-mr-48"
+            className="mt-16 ml-[38%] -mr-12 md:-mr-24"
           >
             <DarkImgCard label="AI spectrogram output / pipeline health map" className="aspect-video rounded-3xl" />
           </motion.div>

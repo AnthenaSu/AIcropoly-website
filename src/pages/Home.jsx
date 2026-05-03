@@ -32,7 +32,7 @@ function ImgCard({ label, className = '', children }) {
   )
 }
 
-const PX = 'px-8 sm:px-16 md:px-24 lg:px-32 xl:px-48'
+const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
 const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
 const sb = { paddingBottom: '8rem' }
 
@@ -59,7 +59,7 @@ export default function Home() {
       </section>
 
       {/* ── Metrics ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <div className="grid grid-cols-3 gap-8 md:gap-16 text-center">
           {[
             { val: '$4.2B',   label: 'Global market',    color: 'text-buckram' },
@@ -75,7 +75,7 @@ export default function Home() {
       </section>
 
       {/* ── Problem image + quote ── */}
-      <section className={PX} style={sb}>
+      <section className={WRAP} style={sb}>
         <motion.div
           variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="grid md:grid-cols-2 gap-6 items-stretch"
@@ -99,7 +99,7 @@ export default function Home() {
       </section>
 
       {/* ── Technology grid ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14 text-center">
           <Tag>Our Approach</Tag>
         </motion.div>
@@ -123,7 +123,7 @@ export default function Home() {
       </section>
 
       {/* ── Wide image + statement ── */}
-      <section className={PX} style={sb}>
+      <section className={WRAP} style={sb}>
         <ImgCard label="Drone in field — aerial inspection shot" className="w-full aspect-[16/7] mb-14" />
         <motion.div
           variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -142,7 +142,7 @@ export default function Home() {
       </section>
 
       {/* ── Team teaser ── */}
-      <section className={PX} style={sy}>
+      <section className={WRAP} style={sy}>
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center md:text-left">
             <div className="mb-8"><Tag>About Us</Tag></div>
