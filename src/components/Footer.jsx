@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-parchment/50 py-14 px-12 md:px-24">
+    <footer className="bg-ink text-fg/50 py-14 px-12 md:px-24">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
         <div>
-          <p className="font-display font-light text-2xl tracking-widest uppercase text-parchment mb-1">AIcropoly</p>
-          <p className="font-mono text-xs text-parchment/40 tracking-widest uppercase">
+          <p className="font-display font-light text-2xl tracking-widest uppercase text-fg mb-1">AIcropoly</p>
+          <p className="font-mono text-xs text-fg/40 tracking-widest uppercase">
             Pipeline Integrity Technology
           </p>
         </div>
@@ -22,7 +22,7 @@ export default function Footer() {
               <Link
                 key={to}
                 to={to}
-                className="hover:text-parchment transition-colors"
+                className="hover:text-fg transition-colors"
               >
                 {label}
               </Link>
@@ -31,7 +31,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-parchment/10 flex flex-col md:flex-row justify-between gap-2">
+      <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-fg/10 flex flex-col md:flex-row justify-between gap-2">
         <p className="font-mono text-xs">© 2026 AIcropoly. All rights reserved.</p>
         <p className="font-mono text-xs">Peter Farrell Cup · UNSW</p>
       </div>

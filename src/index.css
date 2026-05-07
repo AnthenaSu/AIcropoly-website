@@ -3,30 +3,35 @@
 @import "tailwindcss";
 
 @theme {
-  --color-parchment: #F4F6FB;
-  --color-card: #E9EDF5;
-  --color-border: #D2D8E6;
+  /* ── Dark deep-space palette ── */
+  --color-parchment: #0D0B1F;   /* page background */
+  --color-card: #161336;         /* card / panel surface */
+  --color-border: #2E2860;       /* subtle borders */
 
-  --color-ink: #1C2230;
-  --color-ink-muted: #5B6475;
+  --color-ink: #070415;          /* deepest dark — used for alt sections */
+  --color-ink-muted: #7A75A8;
 
-  /* blue/grey accent palette */
-  --color-buckram: #7B8FC7;
-  --color-buckram-dark: #5B70A8;
-  --color-ruskin: #7FA8A0;
-  --color-ruskin-dark: #5C8078;
-  --color-roycroft: #F2A7A0;
-  --color-bunglehouse: #8499A8;
-  --color-bunglehouse-dark: #5C7284;
+  /* fg tokens: primary readable text on dark bg */
+  --color-fg: #EDE9FF;
+  --color-fg-muted: #8480B0;
 
-  --color-primary: #7C8CFF;
-  --color-primary-dark: #5A6BE0;
+  /* accent palette — violet / purple family */
+  --color-buckram: #8B7CF6;
+  --color-buckram-dark: #6D5CE8;
+  --color-ruskin: #A78BFA;
+  --color-ruskin-dark: #7C3AED;
+  --color-bunglehouse: #7EC8E3;
+  --color-bunglehouse-dark: #4BAECF;
+  --color-roycroft: #F472B6;
 
-  --color-accent: #F2A7A0;
-  --color-accent-dark: #D98780;
+  --color-primary: #8B7CF6;
+  --color-primary-dark: #6D5CE8;
 
-  --color-secondary: #8FAFA3;
-  --color-secondary-dark: #6F8E84;
+  --color-accent: #F472B6;
+  --color-accent-dark: #DB2777;
+
+  --color-secondary: #A78BFA;
+  --color-secondary-dark: #7C3AED;
 
   --font-display: 'DM Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -48,7 +53,11 @@
   body {
     font-family: var(--font-body);
     background-color: var(--color-parchment);
-    color: var(--color-ink);
+    background-image:
+      radial-gradient(ellipse at 15% 40%, #1D1145 0%, transparent 60%),
+      radial-gradient(ellipse at 85% 80%, #0E0B35 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--color-fg);
     -webkit-font-smoothing: antialiased;
   }
 }
