@@ -1,10 +1,27 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import desertBg from '../assets/desert.jpg'
+import CountUp from '../components/CountUp'
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { delay, duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
 })
+
+function WordReveal({ text, delay = 0 }) {
+  return text.split(' ').map((word, i) => (
+    <motion.span
+      key={i}
+      initial={{ opacity: 0, y: 22, filter: 'blur(6px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ delay: delay + i * 0.09, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="inline-block mr-[0.28em] last:mr-0"
+    >
+      {word}
+    </motion.span>
+  ))
+}
 
 function Tag({ children, color = 'buckram' }) {
   const styles = {
@@ -22,7 +39,7 @@ function Tag({ children, color = 'buckram' }) {
 
 function ImgCard({ label, className = '', children }) {
   return (
-    <div className={`relative overflow-hidden rounded-3xl group bg-card/60 backdrop-blur-sm border border-border/60 ${className}`}>
+    <div className={`card-glow relative overflow-hidden rounded-3xl group bg-card/60 backdrop-blur-sm border border-border/60 ${className}`}>
       <div className="absolute bottom-5 left-5">
         <p className="font-mono text-xs text-fg-muted/40 tracking-widest uppercase">{label}</p>
       </div>
@@ -35,40 +52,52 @@ const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
 const sy = { paddingTop: '8rem', paddingBottom: '8rem' }
 const sb = { paddingBottom: '8rem' }
 
+const METRICS = [
+  { to: 4.2,  decimals: 1, prefix: '$', suffix: 'B',    label: 'Global market',    color: 'text-buckram' },
+  { to: 87,   decimals: 0, prefix: '',  suffix: '%',    label: 'Cost reduction',   color: 'text-ruskin' },
+  { to: 2.7,  decimals: 1, prefix: '',  suffix: 'M km', label: 'At-risk pipeline', color: 'text-bunglehouse' },
+]
+
 export default function Home() {
+  const heroRef = useRef(null)
+  const { scrollY } = useScroll()
+  const imgY = useTransform(scrollY, [0, 700], [0, 120])
+
   return (
     <main className="bg-parchment">
 
       {/* ── Hero ── */}
-      <section className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 bg-ink" />
-        <div className="absolute -right-40 -top-40 w-[700px] h-[700px] rounded-full bg-buckram/20 blur-3xl" />
-        <div className="absolute -left-60 bottom-0 w-[500px] h-[500px] rounded-full bg-ruskin/15 blur-3xl" />
-        <div className="absolute inset-0 bg-ink/30" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-parchment" />
-        <div className="absolute inset-x-0 bottom-20 flex flex-col items-center text-center px-8 sm:px-12">
-          <motion.div variants={rise(0.15)} initial="hidden" animate="visible" className="mb-5">
+      <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
+        <motion.img
+          src={desertBg}
+          alt=""
+          style={{ y: imgY }}
+          className="absolute inset-0 w-full h-[115%] -top-[8%] object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/20 via-ink/10 to-transparent" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 sm:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="mb-5"
+          >
             <Tag color="fg">Pipeline Integrity Technology</Tag>
           </motion.div>
-          <motion.h1
-            variants={rise(0.3)} initial="hidden" animate="visible"
-            className="font-display font-semibold text-fg text-[clamp(3rem,8vw,8rem)] leading-[1] tracking-tight max-w-4xl"
-          >
-            Listening to<br />What Lies Beneath
-          </motion.h1>
+          <h1 className="font-hero font-semibold text-[#F2E8D8] text-[clamp(3rem,8vw,8rem)] leading-[1.05] tracking-tight max-w-4xl">
+            <span className="block"><WordReveal text="Listening to" delay={0.25} /></span>
+            <span className="block"><WordReveal text="What Lies Beneath" delay={0.5} /></span>
+          </h1>
         </div>
       </section>
 
       {/* ── Metrics ── */}
       <section className={WRAP} style={sy}>
         <div className="grid grid-cols-3 gap-8 md:gap-16 text-center">
-          {[
-            { val: '$4.2B',   label: 'Global market',    color: 'text-buckram' },
-            { val: '87%',     label: 'Cost reduction',   color: 'text-ruskin' },
-            { val: '2.7M km', label: 'At-risk pipeline', color: 'text-bunglehouse' },
-          ].map(({ val, label, color }, i) => (
+          {METRICS.map(({ to, decimals, prefix, suffix, label, color }, i) => (
             <motion.div key={i} variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <p className={`font-display font-bold text-5xl md:text-7xl leading-none mb-3 ${color}`}>{val}</p>
+              <p className={`font-display font-bold text-5xl md:text-7xl leading-none mb-3 ${color}`}>
+                <CountUp to={to} decimals={decimals} prefix={prefix} suffix={suffix} />
+              </p>
               <p className="font-mono text-xs tracking-widest uppercase text-fg-muted">{label}</p>
             </motion.div>
           ))}
@@ -82,7 +111,7 @@ export default function Home() {
           className="grid md:grid-cols-2 gap-6 items-stretch"
         >
           <ImgCard label="Pipeline failure / corrosion visual" className="aspect-[4/5] md:aspect-auto min-h-[400px]" />
-          <div className="bg-card/60 backdrop-blur-sm border border-border/60 rounded-3xl flex flex-col justify-between p-10 sm:p-12 md:p-16 min-h-[400px]">
+          <div className="card-glow bg-card/60 backdrop-blur-sm border border-border/60 rounded-3xl flex flex-col justify-between p-10 sm:p-12 md:p-16 min-h-[400px]">
             <Tag color="fg">The Problem</Tag>
             <div>
               <p className="font-display font-semibold text-fg text-3xl md:text-4xl leading-tight mb-10 tracking-tight">

@@ -102,14 +102,13 @@ export default function Product() {
         <div className="absolute -right-60 top-10 w-[600px] h-[600px] rounded-full bg-bunglehouse/15 blur-3xl" />
         <div className="absolute -left-40 bottom-0 w-[500px] h-[500px] rounded-full bg-buckram/20 blur-3xl" />
         <div className="absolute inset-0 bg-ink/25" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-parchment" />
-        <div className="absolute inset-x-0 bottom-20 flex flex-col items-center text-center px-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.div variants={rise(0.15)} initial="hidden" animate="visible" className="mb-5">
             <Tag color="fg">Our Product</Tag>
           </motion.div>
           <motion.h1
             variants={rise(0.3)} initial="hidden" animate="visible"
-            className="font-display font-semibold text-fg text-[clamp(2.8rem,7vw,7.5rem)] leading-[1] tracking-tight max-w-3xl"
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.8rem,7vw,7.5rem)] leading-[1] tracking-tight max-w-3xl"
           >
             Physics-grounded.<br />AI-accelerated.
           </motion.h1>
@@ -155,7 +154,7 @@ export default function Product() {
       </section>
 
       {/* ── Layer 01: Material Science ── */}
-      <section className="bg-fg overflow-hidden relative" style={syLg}>
+      <section className="bg-card/60 overflow-hidden relative" style={syLg}>
         <div className="absolute -right-40 -top-40 w-[500px] h-[500px] rounded-full bg-buckram/20 blur-3xl" />
         <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -209,7 +208,7 @@ export default function Product() {
       </section>
 
       {/* ── Layer 02: Drone + SDR ── */}
-      <section className="bg-fg overflow-hidden relative" style={syLg}>
+      <section className="bg-card/60 overflow-hidden relative" style={syLg}>
         <div className="absolute -left-40 top-20 w-[500px] h-[500px] rounded-full bg-bunglehouse/18 blur-3xl" />
         <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -259,7 +258,7 @@ export default function Product() {
       </section>
 
       {/* ── Layer 03: AI Analysis ── */}
-      <section className="bg-fg overflow-hidden relative" style={syLg}>
+      <section className="bg-card/60 overflow-hidden relative" style={syLg}>
         <div className="absolute -right-40 -bottom-40 w-[500px] h-[500px] rounded-full bg-ruskin/18 blur-3xl" />
         <div className="absolute left-0 top-0 w-[400px] h-[400px] rounded-full bg-buckram/12 blur-3xl" />
         <div className={`relative ${WRAP}`}>

@@ -1,43 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  /* ── Dark deep-space palette ── */
-  --color-parchment: #0D0B1F;   /* page background */
-  --color-card: #161336;         /* card / panel surface */
-  --color-border: #2E2860;       /* subtle borders */
+  /* ── Desert light palette — matched to photo ── */
+  --color-parchment: #F2E8D8;   /* page background — warm sand */
+  --color-card: #EADDc8;         /* card / panel — lighter dune */
+  --color-border: #D0B898;       /* borders — sun-bleached clay */
 
-  --color-ink: #070415;          /* deepest dark — used for alt sections */
-  --color-ink-muted: #7A75A8;
+  --color-ink: #140E08;          /* hero bg before image loads */
+  --color-ink-muted: #8A6A48;
 
-  /* fg tokens: primary readable text on dark bg */
-  --color-fg: #EDE9FF;
-  --color-fg-muted: #8480B0;
+  /* fg tokens — dark warm rock on sandy bg */
+  --color-fg: #251508;
+  --color-fg-muted: #7A5838;
 
-  /* accent palette — violet / purple family */
-  --color-buckram: #8B7CF6;
-  --color-buckram-dark: #6D5CE8;
-  --color-ruskin: #A78BFA;
-  --color-ruskin-dark: #7C3AED;
-  --color-bunglehouse: #7EC8E3;
-  --color-bunglehouse-dark: #4BAECF;
-  --color-roycroft: #F472B6;
+  /* accent palette — pulled from photo */
+  --color-buckram: #B86030;      /* terracotta dune */
+  --color-buckram-dark: #974E22;
+  --color-ruskin: #C87828;       /* golden ochre sand */
+  --color-ruskin-dark: #A86018;
+  --color-bunglehouse: #5A8098;  /* distant mountain haze */
+  --color-bunglehouse-dark: #406878;
+  --color-roycroft: #7A4828;     /* deep dune shadow */
 
-  --color-primary: #8B7CF6;
-  --color-primary-dark: #6D5CE8;
+  --color-primary: #B86030;
+  --color-primary-dark: #974E22;
 
-  --color-accent: #F472B6;
-  --color-accent-dark: #DB2777;
+  --color-accent: #C87828;
+  --color-accent-dark: #A86018;
 
-  --color-secondary: #A78BFA;
-  --color-secondary-dark: #7C3AED;
+  --color-secondary: #5A8098;
+  --color-secondary-dark: #406878;
 
-  --font-display: 'DM Sans', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-logo: 'Eurostile', 'Exo 2', sans-serif;
+  --font-hero: 'Space Grotesk', sans-serif;
+  --font-nav: 'Rajdhani', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
 
+
+@keyframes card-scan {
+  from { transform: translateX(-160%) skewX(-18deg); }
+  to   { transform: translateX(220%)  skewX(-18deg); }
+}
+
+.card-glow {
+  position: relative;
+  overflow: hidden;
+}
+.card-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(200, 112, 64, 0.13) 50%,
+    rgba(232, 168, 64, 0.08) 55%,
+    transparent 65%
+  );
+  transform: translateX(-160%) skewX(-18deg);
+  pointer-events: none;
+}
+.card-glow:hover::after {
+  animation: card-scan 0.7s ease forwards;
+}
 
 @layer base {
   * {
@@ -54,8 +84,8 @@
     font-family: var(--font-body);
     background-color: var(--color-parchment);
     background-image:
-      radial-gradient(ellipse at 15% 40%, #1D1145 0%, transparent 60%),
-      radial-gradient(ellipse at 85% 80%, #0E0B35 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, #EAD8B8 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 80%, #E8DCC8 0%, transparent 50%);
     background-attachment: fixed;
     color: var(--color-fg);
     -webkit-font-smoothing: antialiased;

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import CountUp from '../components/CountUp'
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
@@ -13,6 +14,7 @@ function Tag({ children, color = 'buckram' }) {
     bunglehouse:'bg-bunglehouse/15 text-bunglehouse',
     fg:         'bg-fg/10 text-fg/60',
     muted:      'bg-fg/5 text-fg-muted',
+    sand:       'bg-[#F2E8D8]/10 text-[#F2E8D8]/70',
   }
   return (
     <span className={`inline-block font-mono text-xs tracking-widest uppercase px-3 py-1 rounded-full ${styles[color]}`}>
@@ -58,14 +60,13 @@ export default function Market() {
         <div className="absolute inset-0 bg-ink" />
         <div className="absolute -left-60 top-20 w-[700px] h-[700px] rounded-full bg-buckram/20 blur-3xl" />
         <div className="absolute right-0 bottom-0 w-[500px] h-[500px] rounded-full bg-ruskin/15 blur-3xl" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-parchment" />
-        <div className="absolute inset-x-0 bottom-24 flex flex-col items-center text-center px-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.div variants={rise(0.15)} initial="hidden" animate="visible" className="mb-8">
-            <Tag color="fg">Market Research</Tag>
+            <Tag color="sand">Market Research</Tag>
           </motion.div>
           <motion.h1
             variants={rise(0.3)} initial="hidden" animate="visible"
-            className="font-display font-semibold text-fg text-[clamp(2.4rem,6vw,6.5rem)] leading-[1.02] tracking-tight max-w-4xl"
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.4rem,6vw,6.5rem)] leading-[1.02] tracking-tight max-w-4xl"
           >
             37,000 km of hydrogen pipelines. Zero inspection solutions.
           </motion.h1>
@@ -106,11 +107,11 @@ export default function Market() {
         <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="mb-20 text-center">
-            <Tag color="fg">Why Now</Tag>
+            <Tag color="sand">Why Now</Tag>
           </motion.div>
           <motion.p
             variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="font-display font-semibold text-fg text-[clamp(2rem,4vw,4rem)] leading-tight tracking-tight text-center mb-24 max-w-3xl mx-auto"
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2rem,4vw,4rem)] leading-tight tracking-tight text-center mb-24 max-w-3xl mx-auto"
           >
             The infrastructure is being built. The safety standard is blank.
           </motion.p>
@@ -121,10 +122,10 @@ export default function Market() {
               { tag: 'Infrastructure Gap',title: '37,000 km planned, <6% funded', note: 'Design-stage window: 2025–2028.' },
             ].map((item, i) => (
               <motion.div key={i} variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="bg-fg/5 backdrop-blur-sm border border-fg/10 rounded-2xl p-8 hover:-translate-y-1 transition-all duration-500">
-                <Tag color="fg">{item.tag}</Tag>
-                <p className="font-display font-semibold text-fg text-2xl mt-8 mb-4 leading-snug tracking-tight">{item.title}</p>
-                <p className="font-mono text-xs text-fg/35 tracking-wide">{item.note}</p>
+                className="bg-[#F2E8D8]/5 backdrop-blur-sm border border-[#F2E8D8]/10 rounded-2xl p-8 hover:-translate-y-1 transition-all duration-500">
+                <Tag color="sand">{item.tag}</Tag>
+                <p className="font-display font-semibold text-[#F2E8D8] text-2xl mt-8 mb-4 leading-snug tracking-tight">{item.title}</p>
+                <p className="font-mono text-xs text-[#F2E8D8]/40 tracking-wide">{item.note}</p>
               </motion.div>
             ))}
           </div>
@@ -141,13 +142,15 @@ export default function Market() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16 text-center">
             {[
-              { label: 'TAM', sub: 'Total Addressable', val: '$27.2B', note: 'Global H₂ pipeline market by 2035 · CAGR 60%' },
-              { label: 'SAM', sub: 'Serviceable',       val: '$4.5B',  note: '15,000–20,000 km suited for drone deployment' },
-              { label: 'SOM', sub: 'Obtainable (3 yr)', val: 'A$9M',   note: 'Australia: AGIG · Jemena · ATCO' },
+              { label: 'TAM', sub: 'Total Addressable', to: 27.2, decimals: 1, prefix: '$',  suffix: 'B', note: 'Global H₂ pipeline market by 2035 · CAGR 60%' },
+              { label: 'SAM', sub: 'Serviceable',       to: 4.5,  decimals: 1, prefix: '$',  suffix: 'B', note: '15,000–20,000 km suited for drone deployment' },
+              { label: 'SOM', sub: 'Obtainable (3 yr)', to: 9,    decimals: 0, prefix: 'A$', suffix: 'M', note: 'Australia: AGIG · Jemena · ATCO' },
             ].map((m, i) => (
               <motion.div key={i} variants={rise(i * 0.12)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                 <Tag>{m.label} · {m.sub}</Tag>
-                <p className="font-display font-bold text-fg text-[clamp(4rem,8vw,8rem)] mt-10 mb-6 leading-none tracking-tight">{m.val}</p>
+                <p className="font-display font-bold text-fg text-[clamp(4rem,8vw,8rem)] mt-10 mb-6 leading-none tracking-tight">
+                  <CountUp to={m.to} decimals={m.decimals} prefix={m.prefix} suffix={m.suffix} />
+                </p>
                 <p className="font-mono text-xs text-fg-muted/50 tracking-wide">{m.note}</p>
               </motion.div>
             ))}
@@ -210,11 +213,11 @@ export default function Market() {
         <div className="absolute -left-40 -top-40 w-[500px] h-[500px] rounded-full bg-fg/10 blur-3xl" />
         <div className={`text-center relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-20">
-            <Tag color="fg">Value Proposition</Tag>
+            <Tag color="sand">Value Proposition</Tag>
           </motion.div>
           <motion.p
             variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="font-display font-bold text-fg text-[clamp(3rem,7vw,7rem)] leading-[1.0] tracking-tight"
+            className="font-display font-bold text-[#F2E8D8] text-[clamp(3rem,7vw,7rem)] leading-[1.0] tracking-tight"
           >
             Detects &lt;1mm cracks.<br />Zero downtime.<br />No contact required.
           </motion.p>

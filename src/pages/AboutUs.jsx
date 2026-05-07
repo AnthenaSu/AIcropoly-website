@@ -48,11 +48,10 @@ export default function AboutUs() {
         <div className="absolute -right-60 -bottom-20 w-[700px] h-[700px] rounded-full bg-ruskin/15 blur-3xl" />
         <div className="absolute -left-40 top-20 w-[500px] h-[500px] rounded-full bg-buckram/15 blur-3xl" />
         <div className="absolute inset-0 bg-ink/20" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-parchment" />
-        <div className="absolute inset-x-0 bottom-20 flex flex-col items-center text-center px-8">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.h1
             variants={rise(0.2)} initial="hidden" animate="visible"
-            className="font-display font-semibold text-fg text-[clamp(3rem,9vw,9rem)] leading-[1] tracking-tight"
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(3rem,9vw,9rem)] leading-[1] tracking-tight"
           >
             About Us
           </motion.h1>
@@ -115,10 +114,10 @@ export default function AboutUs() {
               <motion.div
                 key={i}
                 variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="bg-fg/5 backdrop-blur-sm border border-fg/10 rounded-2xl p-10 hover:-translate-y-1 transition-all duration-500"
+                className="bg-[#F2E8D8]/5 backdrop-blur-sm border border-[#F2E8D8]/10 rounded-2xl p-10 hover:-translate-y-1 transition-all duration-500"
               >
-                <p className="font-display font-bold text-fg text-4xl md:text-5xl mb-6 tracking-tight leading-tight">{v.label}</p>
-                <p className="text-base text-fg/50 leading-relaxed">{v.body}</p>
+                <p className="font-display font-bold text-[#F2E8D8] text-4xl md:text-5xl mb-6 tracking-tight leading-tight">{v.label}</p>
+                <p className="text-base text-[#F2E8D8]/50 leading-relaxed">{v.body}</p>
               </motion.div>
             ))}
           </div>
