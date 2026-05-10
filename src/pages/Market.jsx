@@ -56,7 +56,7 @@ export default function Market() {
     <main className="bg-parchment">
 
       {/* ── Hero ── */}
-      <section className="h-screen w-full relative overflow-hidden">
+      <section data-nav-dark className="h-screen w-full relative overflow-hidden">
         <div className="absolute inset-0 bg-ink" />
         <div className="absolute -left-60 top-20 w-[700px] h-[700px] rounded-full bg-buckram/20 blur-3xl" />
         <div className="absolute right-0 bottom-0 w-[500px] h-[500px] rounded-full bg-ruskin/15 blur-3xl" />

@@ -81,7 +81,6 @@ export default function Home() {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="mb-5"
           >
-            <Tag color="fg">Pipeline Integrity Technology</Tag>
           </motion.div>
           <h1 className="font-hero font-semibold text-[#F2E8D8] text-[clamp(3rem,8vw,8rem)] leading-[1.05] tracking-tight max-w-4xl">
             <span className="block"><WordReveal text="Listening to" delay={0.25} /></span>

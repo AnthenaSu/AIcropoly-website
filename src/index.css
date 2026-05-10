@@ -4,8 +4,8 @@
 
 @theme {
   /* ── Desert light palette — matched to photo ── */
-  --color-parchment: #F2E8D8;   /* page background — warm sand */
-  --color-card: #EADDc8;         /* card / panel — lighter dune */
+  --color-parchment: #EAEAE6;   /* page background — cool grey-sand */
+  --color-card: #E4E3DD;         /* card / panel — lighter dune */
   --color-border: #D0B898;       /* borders — sun-bleached clay */
 
   --color-ink: #140E08;          /* hero bg before image loads */
@@ -84,8 +84,8 @@
     font-family: var(--font-body);
     background-color: var(--color-parchment);
     background-image:
-      radial-gradient(ellipse at 20% 50%, #EAD8B8 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 80%, #E8DCC8 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, #E0E0DC 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 80%, #DBDBD7 0%, transparent 50%);
     background-attachment: fixed;
     color: var(--color-fg);
     -webkit-font-smoothing: antialiased;
