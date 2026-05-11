@@ -118,7 +118,7 @@ export default function Home() {
             className="mb-5"
           >
           </motion.div>
-          <h1 className="font-hero font-semibold text-[#F2E8D8] text-[clamp(3rem,8vw,8rem)] leading-[1.05] tracking-tight max-w-4xl">
+          <h1 className="font-hero font-semibold text-[#F2E8D8] text-[clamp(3rem,8vw,8rem)] leading-[1.05] tracking-wide max-w-4xl [text-shadow:0_4px_40px_rgba(0,0,0,0.7),0_2px_12px_rgba(0,0,0,0.5)]">
             <span className="block"><WordReveal text="Listening to" delay={0.25} /></span>
             <span className="block"><WordReveal text="What Lies Beneath" delay={0.5} /></span>
           </h1>

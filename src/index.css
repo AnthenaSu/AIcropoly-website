@@ -1,67 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'Geist';
+    src: url('../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
 @theme {
-  /* ── Desert light palette — matched to photo ── */
-  --color-parchment: #EAEAE6;   /* page background — cool grey-sand */
-  --color-card: #E4E3DD;         /* card / panel — lighter dune */
-  --color-border: #D0B898;       /* borders — sun-bleached clay */
-
-  --color-ink: #140E08;          /* hero bg before image loads */
-  --color-ink-muted: #8A6A48;
-
-  /* fg tokens — dark warm rock on sandy bg */
-  --color-fg: #251508;
-  --color-fg-muted: #7A5838;
-
-  /* accent palette — pulled from photo */
-  --color-buckram: #B86030;      /* terracotta dune */
-  --color-buckram-dark: #974E22;
-  --color-ruskin: #C87828;       /* golden ochre sand */
-  --color-ruskin-dark: #A86018;
-  --color-bunglehouse: #5A8098;  /* distant mountain haze */
-  --color-bunglehouse-dark: #406878;
-  --color-roycroft: #7A4828;     /* deep dune shadow */
-
-  --color-primary: #B86030;
-  --color-primary-dark: #974E22;
-
-  --color-accent: #C87828;
-  --color-accent-dark: #A86018;
-
-  --color-secondary: #5A8098;
-  --color-secondary-dark: #406878;
-
-  --font-logo: 'Eurostile', 'Exo 2', sans-serif;
-  --font-hero: 'Space Grotesk', sans-serif;
-  --font-nav: 'Rajdhani', sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Space Grotesk', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+    /* ── Desert light palette — matched to photo ── */
+    --color-parchment: #EAEAE6;
+    /* page background — cool grey-sand */
+    --color-card: #E4E3DD;
+    /* card / panel — lighter dune */
+    --color-border: #D0B898;
+    /* borders — sun-bleached clay */
+    --color-ink: #140E08;
+    /* hero bg before image loads */
+    --color-ink-muted: #8A6A48;
+    /* fg tokens — dark warm rock on sandy bg */
+    --color-fg: #251508;
+    --color-fg-muted: #7A5838;
+    /* accent palette — pulled from photo */
+    --color-buckram: #B86030;
+    /* terracotta dune */
+    --color-buckram-dark: #974E22;
+    --color-ruskin: #C87828;
+    /* golden ochre sand */
+    --color-ruskin-dark: #A86018;
+    --color-bunglehouse: #5A8098;
+    /* distant mountain haze */
+    --color-bunglehouse-dark: #406878;
+    --color-roycroft: #7A4828;
+    /* deep dune shadow */
+    --color-primary: #B86030;
+    --color-primary-dark: #974E22;
+    --color-accent: #C87828;
+    --color-accent-dark: #A86018;
+    --color-secondary: #5A8098;
+    --color-secondary-dark: #406878;
+    --font-logo: 'Eurostile', 'Exo 2', sans-serif;
+    --font-hero: 'Geist', 'Space Grotesk', sans-serif;
+    --font-nav: 'Rajdhani', sans-serif;
+    --font-display: 'Geist', 'Space Grotesk', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
 }
 
-
-
 @layer base {
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    font-family: var(--font-body);
-    background-color: var(--color-parchment);
-    background-image:
-      radial-gradient(ellipse at 20% 50%, #E0E0DC 0%, transparent 55%),
-      radial-gradient(ellipse at 80% 80%, #DBDBD7 0%, transparent 50%);
-    background-attachment: fixed;
-    color: var(--color-fg);
-    -webkit-font-smoothing: antialiased;
-  }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        font-family: var(--font-body);
+        background-color: var(--color-parchment);
+        background-image: radial-gradient(ellipse at 20% 50%, #E0E0DC 0%, transparent 55%), radial-gradient(ellipse at 80% 80%, #DBDBD7 0%, transparent 50%);
+        background-attachment: fixed;
+        color: var(--color-fg);
+        -webkit-font-smoothing: antialiased;
+    }
 }
