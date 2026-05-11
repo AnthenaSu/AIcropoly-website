@@ -169,13 +169,16 @@ export default function Home() {
 
       {/* ── Technology grid ── */}
       <section className={WRAP} style={sy}>
-        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14 text-center">
-          <Tag>Our Approach</Tag>
-        </motion.div>
+        <motion.h2
+          variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="font-display font-semibold text-fg text-4xl md:text-5xl tracking-tight mb-14"
+        >
+          Our Approach
+        </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             {
-              tag: 'Material Science', color: 'buckram',
+              tag: 'Material Science', color: 'text-buckram',
               label: 'Acoustic signature research',
               img: materialsciencehomepage,
               imgClass: 'object-cover',
@@ -183,7 +186,7 @@ export default function Home() {
               stats: ['PLLA piezo film', '915 MHz carrier', 'Passive — no battery'],
             },
             {
-              tag: 'Drone + SDR', color: 'ruskin',
+              tag: 'Drone + SDR', color: 'text-ruskin',
               label: 'Non-contact sensing system',
               img: howitworks1,
               imgClass: 'object-cover',
@@ -191,7 +194,7 @@ export default function Home() {
               stats: ['IQ data acquisition', 'Zero infrastructure', 'Fly-over inspection'],
             },
             {
-              tag: 'AI Analysis', color: 'bunglehouse',
+              tag: 'AI Analysis', color: 'text-bunglehouse',
               label: 'Real-time defect classification',
               img: spectrogramDiagram,
               imgClass: 'object-cover',
@@ -204,15 +207,15 @@ export default function Home() {
               variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="group cursor-default hover:-translate-y-1 transition-transform duration-500 flex flex-col"
             >
-              <div className={`relative overflow-hidden rounded-3xl aspect-[3/4] mb-5 transition-transform duration-500 group-hover:scale-[1.02] bg-card/60 border border-border/60`}>
+              <div className="relative overflow-hidden rounded-3xl aspect-[3/4] mb-6 transition-transform duration-500 group-hover:scale-[1.02] bg-card/60 border border-border/60">
                 <img src={item.img} alt={item.label} className={`w-full h-full ${item.imgClass}`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 <div className="absolute bottom-5 left-5">
                   <p className="font-mono text-xs text-white/40 tracking-widest uppercase">{item.label}</p>
                 </div>
               </div>
-              <Tag color={item.color}>{item.tag}</Tag>
-              <p className="text-base text-fg-muted mt-3 mb-4 leading-relaxed">{item.body}</p>
+              <h3 className={`font-display font-semibold text-2xl tracking-tight mb-3 ${item.color}`}>{item.tag}</h3>
+              <p className="text-base text-fg-muted mb-5 leading-relaxed">{item.body}</p>
               <div className="flex flex-col gap-1.5 mt-auto">
                 {item.stats.map((s, j) => (
                   <p key={j} className="font-mono text-xs text-fg-muted/60 tracking-widest uppercase flex items-center gap-2">
