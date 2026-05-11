@@ -1,8 +1,13 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import desertBg from '../assets/desert.jpg'
 import CountUp from '../components/CountUp'
+import corrosion1 from '../assets/pipelinecorrosion1.jpg'
+import corrosion2 from '../assets/pipelinecorrosion2.jpeg'
+import corrosion3 from '../assets/pipelinecorrosion3.jpg'
+
+const CORROSION_IMGS = [corrosion1, corrosion2, corrosion3]
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
@@ -39,7 +44,7 @@ function Tag({ children, color = 'buckram' }) {
 
 function ImgCard({ label, className = '', children }) {
   return (
-    <div className={`card-glow relative overflow-hidden rounded-3xl group bg-card/60 backdrop-blur-sm border border-border/60 ${className}`}>
+    <div className={`relative overflow-hidden rounded-3xl group bg-card/60 backdrop-blur-sm border border-border/60 ${className}`}>
       <div className="absolute bottom-5 left-5">
         <p className="font-mono text-xs text-fg-muted/40 tracking-widest uppercase">{label}</p>
       </div>
@@ -54,9 +59,40 @@ const sb = { paddingBottom: '8rem' }
 
 const METRICS = [
   { to: 4.2,  decimals: 1, prefix: '$', suffix: 'B',    label: 'Global market',    color: 'text-buckram' },
-  { to: 87,   decimals: 0, prefix: '',  suffix: '%',    label: 'Cost reduction',   color: 'text-ruskin' },
-  { to: 2.7,  decimals: 1, prefix: '',  suffix: 'M km', label: 'At-risk pipeline', color: 'text-bunglehouse' },
+  { to: 87,   decimals: 0, prefix: '',  suffix: '%',    label: 'Cost reduction',   color: 'text-bunglehouse' },
+  { to: 2.7,  decimals: 1, prefix: '',  suffix: 'M km', label: 'At-risk pipeline', color: 'text-ruskin' },
 ]
+
+function CorrosionCarousel() {
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % CORROSION_IMGS.length), 3500)
+    return () => clearInterval(t)
+  }, [])
+  return (
+    <div className="relative overflow-hidden rounded-3xl aspect-[4/5] md:aspect-auto min-h-[400px]">
+      <AnimatePresence>
+        <motion.img
+          key={idx}
+          src={CORROSION_IMGS[idx]}
+          alt="Pipeline corrosion"
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </AnimatePresence>
+      <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-2 z-10">
+        {CORROSION_IMGS.map((_, i) => (
+          <button key={i} onClick={() => setIdx(i)}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === idx ? 'bg-white scale-125' : 'bg-white/35'}`}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const heroRef = useRef(null)
@@ -109,8 +145,8 @@ export default function Home() {
           variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="grid md:grid-cols-2 gap-6 items-stretch"
         >
-          <ImgCard label="Pipeline failure / corrosion visual" className="aspect-[4/5] md:aspect-auto min-h-[400px]" />
-          <div className="card-glow bg-card/60 backdrop-blur-sm border border-border/60 rounded-3xl flex flex-col justify-between p-10 sm:p-12 md:p-16 min-h-[400px]">
+          <CorrosionCarousel />
+          <div className="bg-card/60 backdrop-blur-sm border border-border/60 rounded-3xl flex flex-col justify-between p-10 sm:p-12 md:p-16 min-h-[400px]">
             <Tag color="fg">The Problem</Tag>
             <div>
               <p className="font-display font-semibold text-fg text-3xl md:text-4xl leading-tight mb-10 tracking-tight">
