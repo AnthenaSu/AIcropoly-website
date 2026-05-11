@@ -433,7 +433,7 @@ export default function Product() {
           </motion.div>
           <motion.h1
             variants={rise(0.3)} initial="hidden" animate="visible"
-            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.8rem,7vw,7.5rem)] leading-[1.25] tracking-tight max-w-3xl"
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.8rem,7vw,7.5rem)] leading-[1.25] tracking-tight max-w-3xl [text-shadow:0_4px_40px_rgba(0,0,0,0.7),0_2px_12px_rgba(0,0,0,0.5)]"
           >
             <span style={{ whiteSpace: 'nowrap' }}>Physics-grounded.</span><br />
             <span style={{ whiteSpace: 'nowrap' }}>AI-accelerated.</span>
@@ -692,7 +692,11 @@ export default function Product() {
                     <div className="border-l-2 border-buckram/60 pl-5 py-1">
                       <p className="font-mono text-xl text-ink font-semibold tracking-wide">s(t) = I(t) + jQ(t)</p>
                     </div>
-                    <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase mt-6">From IQ alone we recover</p>
+                    <motion.p
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                      className="font-mono text-sm font-medium text-ink tracking-widest uppercase mt-6">From IQ alone we recover</motion.p>
                     <div className="grid grid-cols-3 gap-4">
                       {[
                         { label: 'Instantaneous amplitude', formula: 'A(t) = √(I² + Q²)' },
@@ -725,11 +729,15 @@ export default function Product() {
                         { label: 'Modulation depth',       body: 'Proxy for defect severity — deeper crack → stronger piezo response → higher M:', formula: 'M = (A_max − A_min) / (A_max + A_min)' },
                         { label: 'Frequency deviation Δf', body: 'Crack alters acoustic propagation, shifting sidebands from expected position:', formula: 'f_sideband = f_carrier ± (f_mod + Δf)' },
                       ].map((item, i) => (
-                        <div key={i} className="border-l-2 border-ink/20 pl-5 py-1">
+                        <motion.div key={i}
+                          initial={{ opacity: 0, y: 18 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                          className="border-l-2 border-ink/20 pl-5 py-1">
                           <p className="text-base font-semibold text-ink mb-1">{item.label}</p>
                           <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>
                           {item.formula && <p className="font-mono text-sm text-ink/80 tracking-wide mt-2">{item.formula}</p>}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                     <SpectrumViz />
@@ -753,11 +761,15 @@ export default function Product() {
                         { label: 'Mode conversion S0 → A0', body: 'Structural discontinuities convert energy from S0 to A0 — secondary lower-frequency arrival with higher dispersion. Greater converted energy = larger defect.', formula: null },
                         { label: 'Dispersion behaviour',   body: 'A0 dispersion varies with crack state (partially vs. fully open), enabling defect classification beyond binary presence/absence.', formula: null },
                       ].map((item, i) => (
-                        <div key={i} className="border-l-2 border-ink/20 pl-5 py-1">
+                        <motion.div key={i}
+                          initial={{ opacity: 0, y: 18 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                          className="border-l-2 border-ink/20 pl-5 py-1">
                           <p className="text-base font-semibold text-ink mb-1">{item.label}</p>
                           <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>
                           {item.formula && <p className="font-mono text-sm text-ink/80 tracking-wide mt-2">{item.formula}</p>}
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                     <SpectrogramViz />

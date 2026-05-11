@@ -6,6 +6,10 @@ import CountUp from '../components/CountUp'
 import corrosion1 from '../assets/pipelinecorrosion1.jpg'
 import corrosion2 from '../assets/pipelinecorrosion2.jpeg'
 import corrosion3 from '../assets/pipelinecorrosion3.jpg'
+import sensorPatch from '../assets/sensor-patch.png'
+import howitworks1 from '../assets/howitworks1.png'
+import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
+import materialsciencehomepage from '../assets/materialsciencehomepage.png'
 
 const CORROSION_IMGS = [corrosion1, corrosion2, corrosion3]
 
@@ -170,18 +174,52 @@ export default function Home() {
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { tag: 'Material Science', label: 'Acoustic signature research',    color: 'buckram' },
-            { tag: 'Drone + SDR',      label: 'Non-contact sensing system',     color: 'ruskin' },
-            { tag: 'AI Analysis',      label: 'Real-time defect classification', color: 'bunglehouse' },
+            {
+              tag: 'Material Science', color: 'buckram',
+              label: 'Acoustic signature research',
+              img: materialsciencehomepage,
+              imgClass: 'object-cover',
+              body: 'Each defect type — corrosion, stress cracking, hydrogen embrittlement — has a distinct acoustic signature. We characterised these responses across material samples to give our AI a physics-grounded training foundation.',
+              stats: ['PLLA piezo film', '915 MHz carrier', 'Passive — no battery'],
+            },
+            {
+              tag: 'Drone + SDR', color: 'ruskin',
+              label: 'Non-contact sensing system',
+              img: howitworks1,
+              imgClass: 'object-cover',
+              body: 'A drone transmits a 915 MHz carrier to our passive sensor patch. The SDR captures the backscatter as IQ samples — encoding the full structural state of the pipe wall, wirelessly and in real time.',
+              stats: ['IQ data acquisition', 'Zero infrastructure', 'Fly-over inspection'],
+            },
+            {
+              tag: 'AI Analysis', color: 'bunglehouse',
+              label: 'Real-time defect classification',
+              img: spectrogramDiagram,
+              imgClass: 'object-cover',
+              body: 'IQ data is converted to time-frequency spectrograms via STFT, then classified by our trained model. Output: a colour-coded pipeline health map with GPS-tagged defect locations and severity scores.',
+              stats: ['STFT spectrogram', 'Defect classification', 'GPS health map'],
+            },
           ].map((item, i) => (
             <motion.div
               key={i}
               variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-              className="group cursor-default text-center hover:-translate-y-1 transition-transform duration-500"
+              className="group cursor-default hover:-translate-y-1 transition-transform duration-500 flex flex-col"
             >
-              <ImgCard label={item.label} className="aspect-[3/4] mb-5 transition-transform duration-500 group-hover:scale-[1.02]" />
+              <div className={`relative overflow-hidden rounded-3xl aspect-[3/4] mb-5 transition-transform duration-500 group-hover:scale-[1.02] bg-card/60 border border-border/60`}>
+                <img src={item.img} alt={item.label} className={`w-full h-full ${item.imgClass}`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute bottom-5 left-5">
+                  <p className="font-mono text-xs text-white/40 tracking-widest uppercase">{item.label}</p>
+                </div>
+              </div>
               <Tag color={item.color}>{item.tag}</Tag>
-              <p className="text-base text-fg-muted mt-3">{item.label}</p>
+              <p className="text-base text-fg-muted mt-3 mb-4 leading-relaxed">{item.body}</p>
+              <div className="flex flex-col gap-1.5 mt-auto">
+                {item.stats.map((s, j) => (
+                  <p key={j} className="font-mono text-xs text-fg-muted/60 tracking-widest uppercase flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-fg-muted/40 inline-block" />{s}
+                  </p>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>

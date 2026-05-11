@@ -66,7 +66,7 @@ export default function AboutUs() {
           </motion.div>
           <motion.p
             variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="font-display font-bold text-fg text-5xl md:text-7xl leading-tight tracking-tight"
+            className="font-display font-bold text-fg text-5xl md:text-7xl leading-tight tracking-normal"
           >
             Make critical infrastructure invisible to failure.
           </motion.p>
