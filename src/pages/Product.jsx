@@ -1,5 +1,5 @@
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
-import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
 import sensorPatch from '../assets/sensor-patch.png'
 import productCover from '../assets/productcoverpage.png'
 import howitworks1 from '../assets/howitworks1.png'
@@ -8,6 +8,47 @@ import howitworks3 from '../assets/howitworks3.png'
 import howitworks4 from '../assets/howitworks4.png'
 import howitworks5 from '../assets/howitworks5.png'
 import howitworks6 from '../assets/howitworks6.png'
+import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
+
+function SectionLoader({ number, light = false }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-10% 0px' })
+  const [displayed, setDisplayed] = useState('0.0')
+
+  useEffect(() => {
+    if (!isInView) return
+    const duration = 900
+    const steps = 45
+    const interval = duration / steps
+    let step = 0
+    const timer = setInterval(() => {
+      step++
+      const eased = 1 - Math.pow(1 - step / steps, 3)
+      setDisplayed((number * eased).toFixed(1))
+      if (step >= steps) clearInterval(timer)
+    }, interval)
+    return () => clearInterval(timer)
+  }, [isInView, number])
+
+  const textColor = light ? 'text-ink-muted/60' : 'text-[#F2E8D8]/35'
+  const trackColor = light ? 'bg-ink/12' : 'bg-[#F2E8D8]/10'
+  const fillColor  = light ? 'bg-ink/40' : 'bg-[#F2E8D8]/35'
+
+  return (
+    <div ref={ref} className="mb-8">
+      <p className={`font-mono text-xs tracking-widest mb-3 ${textColor}`}>{displayed} /</p>
+      <div className={`h-px w-16 ${trackColor} overflow-hidden`}>
+        <motion.div
+          className={`h-full ${fillColor}`}
+          initial={{ scaleX: 0 }}
+          animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: 'left' }}
+        />
+      </div>
+    </div>
+  )
+}
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
@@ -97,6 +138,214 @@ const HOW_STEPS = [
   { img: howitworks6, title: 'Drone reads the backscatter',      body: 'The MOSFET state change alters how the antenna re-radiates the signal. The drone reads that backscatter difference and pinpoints the defect — wirelessly, passively, instantly.' },
 ]
 
+function SpectrumViz() {
+  const canvasRef = useRef(null)
+  const [mode, setMode] = useState('no_defect')
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+    const render = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (!rect.width) return
+      const W = rect.width, H = rect.height
+      canvas.width = W * dpr; canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.fillStyle = '#131110'; ctx.fillRect(0, 0, W, H)
+      ctx.strokeStyle = 'rgba(242,232,216,0.05)'; ctx.lineWidth = 1
+      for (let i = 0; i < 5; i++) {
+        const y = H * 0.08 + i * (H * 0.76 / 4)
+        ctx.beginPath(); ctx.moveTo(W * 0.06, y); ctx.lineTo(W * 0.97, y); ctx.stroke()
+      }
+      ctx.beginPath()
+      for (let x = 0; x < W; x++) {
+        const y = H * 0.82 + (Math.random() - 0.5) * 10
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+      }
+      ctx.strokeStyle = 'rgba(90,128,152,0.22)'; ctx.lineWidth = 1; ctx.stroke()
+      const pk = W * 0.5
+      const pFn = x => Math.exp((x - pk) * (x - pk) * -1 / (W * W * 0.0025)) * H * 0.68
+      ctx.beginPath()
+      for (let x = 0; x < W; x++) { const y = H * 0.84 - pFn(x); x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y) }
+      ctx.lineTo(W, H * 0.84); ctx.lineTo(0, H * 0.84); ctx.closePath()
+      const gr = ctx.createLinearGradient(pk, 0, pk, H * 0.84)
+      gr.addColorStop(0, 'rgba(200,120,40,0.2)'); gr.addColorStop(1, 'rgba(200,120,40,0)')
+      ctx.fillStyle = gr; ctx.fill()
+      ctx.beginPath()
+      for (let x = 0; x < W; x++) { const y = H * 0.84 - pFn(x); x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y) }
+      ctx.strokeStyle = '#C87828'; ctx.lineWidth = 2; ctx.stroke()
+      if (mode === 'defect') {
+        ;[-W * 0.15, W * 0.15].forEach(off => {
+          const sx = pk + off
+          ctx.beginPath()
+          for (let x = 0; x < W; x++) {
+            const y = H * 0.84 - Math.exp((x - sx) * (x - sx) * -1 / (W * W * 0.0008)) * H * 0.28
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+          }
+          ctx.strokeStyle = '#B86030'; ctx.lineWidth = 1.5; ctx.stroke()
+        })
+        ctx.fillStyle = 'rgba(184,96,48,0.75)'; ctx.font = `${Math.round(W * 0.025)}px monospace`
+        ctx.fillText('f ± f_mod', pk - W * 0.32, H * 0.48)
+      }
+      ctx.fillStyle = 'rgba(242,232,216,0.22)'; ctx.font = `${Math.round(W * 0.025)}px monospace`
+      ctx.fillText('915 MHz', pk - 22, H * 0.97)
+    }
+    const ro = new ResizeObserver(render); ro.observe(canvas); render()
+    return () => ro.disconnect()
+  }, [mode])
+  return (
+    <div className="mt-5 flex flex-col gap-3">
+      <div className="flex gap-2">
+        {[['no_defect', 'No Defect'], ['defect', 'Defect']].map(([v, l]) => (
+          <button key={v} onClick={() => setMode(v)} className={`font-mono font-semibold text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full border transition-all duration-200 ${mode === v ? 'bg-buckram/10 border-buckram/40 text-buckram' : 'bg-ink/5 border-ink/25 text-ink-muted hover:border-ink/40 hover:text-ink'}`}>{l}</button>
+        ))}
+      </div>
+      <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
+      <p className="font-mono text-[13px] text-ink-muted tracking-widest">
+        {mode === 'no_defect' ? '915 MHz carrier stable — MOSFET ON, no sidelobes' : 'Sidelobes at f_carrier ± f_mod — defect toggling detected'}
+      </p>
+    </div>
+  )
+}
+
+function SpectrogramViz() {
+  const canvasRef = useRef(null)
+  const [mode, setMode] = useState('no_defect')
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+    const render = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (!rect.width) return
+      const W = rect.width, H = rect.height
+      canvas.width = W * dpr; canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.fillStyle = '#0a0d0c'; ctx.fillRect(0, 0, W, H)
+      const bins = 100, bands = 48
+      const sx = W * 0.08, sy = H * 0.06, gW = W * 0.86, gH = H * 0.82
+      const cW = gW / bins, cH = gH / bands
+      for (let t = 0; t < bins; t++) {
+        for (let f = 0; f < bands; f++) {
+          let e = f >= 20 && f <= 27 ? 0.8 + Math.random() * 0.15 : Math.random() * 0.07
+          if (mode === 'defect' && t >= 63 && t <= 73 && f >= 16 && f <= 31)
+            e = Math.max(e, 0.7 * Math.exp(-((t - 68) ** 2 / 16 + (f - 24) ** 2 / 18)))
+          let r, g, b
+          if (e < 0.08) { r = 10; g = 13; b = 12 }
+          else if (e < 0.4) { const v = e / 0.4; r = Math.round(10 + v * 80); g = Math.round(13 + v * 115); b = Math.round(12 + v * 140) }
+          else if (e < 0.7) { const v = (e - 0.4) / 0.3; r = Math.round(90 + v * 110); g = Math.round(128 - v * 28); b = Math.round(152 - v * 122) }
+          else { r = 200; g = Math.round(120 - (e - 0.7) * 200); b = 40 }
+          if (mode === 'defect' && t >= 63 && t <= 73 && f >= 16 && f <= 31 && e > 0.42) { r = 184; g = 96; b = 48 }
+          ctx.fillStyle = `rgb(${r},${g},${b})`
+          ctx.fillRect(sx + t * cW, sy + (bands - f - 1) * cH, cW + 0.5, cH + 0.5)
+        }
+      }
+      if (mode === 'defect') {
+        const ax = sx + 68 * cW
+        ctx.strokeStyle = 'rgba(184,96,48,0.85)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 3])
+        ctx.beginPath(); ctx.moveTo(ax, sy); ctx.lineTo(ax, sy + gH); ctx.stroke()
+        ctx.setLineDash([])
+        ctx.fillStyle = 'rgba(184,96,48,0.9)'; ctx.font = `${Math.round(W * 0.026)}px monospace`
+        ctx.fillText('Δt', ax + 4, sy + gH * 0.22)
+      }
+      ctx.fillStyle = 'rgba(242,232,216,0.2)'; ctx.font = `${Math.round(W * 0.025)}px monospace`
+      ctx.fillText('Time →', W * 0.44, H * 0.97)
+      ctx.save(); ctx.translate(W * 0.02, H * 0.5); ctx.rotate(-Math.PI / 2)
+      ctx.fillText('Freq', -16, 0); ctx.restore()
+    }
+    const ro = new ResizeObserver(render); ro.observe(canvas); render()
+    return () => ro.disconnect()
+  }, [mode])
+  return (
+    <div className="mt-5 flex flex-col gap-3">
+      <div className="flex gap-2">
+        {[['no_defect', 'No Defect'], ['defect', 'Defect'], ['diagram', 'Diagram']].map(([v, l]) => (
+          <button key={v} onClick={() => setMode(v)} className={`font-mono font-semibold text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full border transition-all duration-200 ${mode === v ? 'bg-buckram/10 border-buckram/40 text-buckram' : 'bg-ink/5 border-ink/25 text-ink-muted hover:border-ink/40 hover:text-ink'}`}>{l}</button>
+        ))}
+      </div>
+      {mode === 'diagram'
+        ? <div className="w-full rounded-xl overflow-hidden bg-white flex items-center justify-center" style={{ height: '320px' }}><img src={spectrogramDiagram} alt="Spectrogram diagram" className="w-full h-full object-contain" /></div>
+        : <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
+      }
+      <p className="font-mono text-[13px] text-ink-muted tracking-widest">
+        {mode === 'no_defect' ? '915 MHz band stable — no reflection arrival' : mode === 'defect' ? 'Reflection burst at Δt — d_crack = v_group × Δt / 2' : 'A spectrogram maps acoustic wave frequencies over time to provide spatial localisation and diagnostics for guided wave events.'}
+      </p>
+    </div>
+  )
+}
+
+function ConstellationViz() {
+  const canvasRef = useRef(null)
+  const [mode, setMode] = useState('no_defect')
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+    const render = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (!rect.width) return
+      const W = rect.width, H = rect.height
+      canvas.width = W * dpr; canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.fillStyle = '#131110'; ctx.fillRect(0, 0, W, H)
+      const cx = W / 2, cy = H / 2, sc = Math.min(W, H) * 0.36
+      ;[0.33, 0.66, 1.0].forEach(r => {
+        ctx.beginPath(); ctx.arc(cx, cy, r * sc, 0, Math.PI * 2)
+        ctx.strokeStyle = 'rgba(242,232,216,0.07)'; ctx.lineWidth = 1; ctx.stroke()
+      })
+      ctx.strokeStyle = 'rgba(242,232,216,0.1)'; ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(cx - sc * 1.1, cy); ctx.lineTo(cx + sc * 1.1, cy); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(cx, cy - sc * 1.1); ctx.lineTo(cx, cy + sc * 1.1); ctx.stroke()
+      ctx.fillStyle = 'rgba(242,232,216,0.25)'; ctx.font = `${Math.round(W * 0.028)}px monospace`
+      ctx.fillText('I', cx + sc * 1.07, cy + 4); ctx.fillText('Q', cx + 4, cy - sc * 1.02)
+      if (mode === 'no_defect') {
+        const a0 = Math.PI / 4
+        for (let i = 0; i < 280; i++) {
+          const r = 0.75 * sc + (Math.random() - 0.5) * 0.04 * sc
+          const a = a0 + (Math.random() - 0.5) * 0.07
+          ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, cy - Math.sin(a) * r, 2, 0, Math.PI * 2)
+          ctx.fillStyle = 'rgba(90,128,152,0.75)'; ctx.fill()
+        }
+      } else {
+        const angs = [Math.PI / 4, Math.PI / 4 + Math.PI * 0.55]
+        const cols = ['rgba(90,128,152,0.65)', 'rgba(184,96,48,0.75)']
+        angs.forEach((a0, idx) => {
+          for (let i = 0; i < 140; i++) {
+            const r = 0.75 * sc + (Math.random() - 0.5) * (idx === 0 ? 0.04 : 0.09) * sc
+            const a = a0 + (Math.random() - 0.5) * 0.1
+            ctx.beginPath(); ctx.arc(cx + Math.cos(a) * r, cy - Math.sin(a) * r, 2, 0, Math.PI * 2)
+            ctx.fillStyle = cols[idx]; ctx.fill()
+          }
+        })
+        ctx.beginPath()
+        ctx.arc(cx, cy, sc * 0.75, -(Math.PI / 4), -(Math.PI / 4 + Math.PI * 0.55), true)
+        ctx.strokeStyle = 'rgba(200,120,40,0.45)'; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4])
+        ctx.stroke(); ctx.setLineDash([])
+        ctx.fillStyle = 'rgba(200,120,40,0.8)'; ctx.font = `${Math.round(W * 0.028)}px monospace`
+        ctx.fillText('Δφ', cx - sc * 0.08, cy + sc * 0.38)
+      }
+    }
+    const ro = new ResizeObserver(render); ro.observe(canvas); render()
+    return () => ro.disconnect()
+  }, [mode])
+  return (
+    <div className="mt-5 flex flex-col gap-3">
+      <div className="flex gap-2">
+        {[['no_defect', 'No Defect'], ['defect', 'Defect']].map(([v, l]) => (
+          <button key={v} onClick={() => setMode(v)} className={`font-mono font-semibold text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full border transition-all duration-200 ${mode === v ? 'bg-buckram/10 border-buckram/40 text-buckram' : 'bg-ink/5 border-ink/25 text-ink-muted hover:border-ink/40 hover:text-ink'}`}>{l}</button>
+        ))}
+      </div>
+      <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
+      <p className="font-mono text-[13px] text-ink-muted tracking-widest font-medium">
+        {mode === 'no_defect' ? 'IQ cluster at fixed phase — MOSFET ON, impedance stable' : 'Phase shift Δφ — second cluster indicates MOSFET toggling'}
+      </p>
+    </div>
+  )
+}
+
 function HowItWorksSection() {
   const sectionRef = useRef(null)
   const totalSlides = HOW_STEPS.length + 1
@@ -169,6 +418,7 @@ function HowItWorksSection() {
 
 export default function Product() {
   const [activeTab, setActiveTab] = useState(0)
+  const [activeTabSDR, setActiveTabSDR] = useState(0)
 
   return (
     <main className="bg-parchment" style={{ scrollSnapType: 'y mandatory' }}>
@@ -197,14 +447,11 @@ export default function Product() {
       {/* ── Layer 01: Material Science ── */}
       <section data-nav-dark className="bg-[#131110] overflow-hidden relative" style={syLg}>
         <div className={`relative ${WRAP}`}>
-          <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 min-h-[70vh] -ml-12 md:-ml-24 -mr-12 md:-mr-24">
+          <div className="grid grid-cols-[2fr_3fr] gap-24 md:gap-40 min-h-[70vh] -ml-12 md:-ml-24 -mr-12 md:-mr-24">
 
             {/* ── Left: step + heading + nav list ── */}
             <div className="flex flex-col pl-6 md:pl-8">
-              <motion.p variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                className="font-mono text-xs text-[#F2E8D8]/35 tracking-widest mb-8">
-                1.0 /
-              </motion.p>
+              <SectionLoader number={1.0} />
               <h2 className="font-display font-semibold text-[#F2E8D8] text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight mb-14">
                 {['Material', 'Science'].map((word, i) => (
                   <motion.div
@@ -250,19 +497,19 @@ export default function Product() {
                   <motion.div key="overview"
                     initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex flex-col gap-10">
+                    className="flex flex-col gap-20">
                     <div>
-                      <p className="text-lg text-[#F2E8D8]/65 leading-relaxed mb-5">
+                      <p className="text-lg text-[#F2E8D8]/90 leading-relaxed mb-5">
                         Pipeline defects alter how a pipe wall responds to acoustic excitation. We characterised these
                         responses across material samples to give our AI a physics-grounded training foundation.
                       </p>
-                      <p className="text-lg text-[#F2E8D8]/65 leading-relaxed">
+                      <p className="text-lg text-[#F2E8D8]/90 leading-relaxed">
                         Every defect type — corrosion, stress cracking, hydrogen embrittlement — has a distinct acoustic
                         signature. Our sensor film captures it passively, at any time.
                       </p>
                     </div>
                     <div>
-                      <p className="font-mono text-xs text-[#F2E8D8]/35 tracking-widest uppercase mb-4">
+                      <p className="font-mono text-[#F2E8D8]/70 font-medium uppercase tracking-widest mb-4">
                         PLLA-based Self-Powered Sensor Patch: Overview
                       </p>
                       <img src={sensorPatch} alt="PLLA-based Self-Powered Sensor Patch overview"
@@ -277,14 +524,14 @@ export default function Product() {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col gap-10">
                     <div className="flex flex-col gap-6">
-                      <p className="text-xl text-[#F2E8D8]/75 leading-relaxed">
+                      <p className="text-xl text-[#F2E8D8]/90 leading-relaxed">
                         Poly-L-Lactic Acid (PLLA) generates electricity through shear piezoelectricity (d14 constant).
                         Controlled uniaxial stretching (3–5×) aligns C=O dipoles into the electro-active{' '}
                         <span className="text-[#F2E8D8] font-semibold">Beta-Phase</span>.
                       </p>
                       <div className="flex flex-col gap-1">
-                        <p className="font-mono text-base text-[#F2E8D8]/60 tracking-wider">V = g₁₄ · σ · t</p>
-                        <p className="font-mono text-xs text-[#F2E8D8]/30 tracking-wide">V: Voltage · g: piezo-constant · σ: shear stress · t: film thickness</p>
+                        <p className="font-mono text-base text-[#F2E8D8]/75 tracking-wider">V = g₁₄ · σ · t</p>
+                        <p className="font-mono text-[12px] text-[#F2E8D8]/50 tracking-wide">V: Voltage · g: piezo-constant · σ: shear stress · t: film thickness</p>
                       </div>
                     </div>
                     <div className="mt-16">
@@ -292,9 +539,9 @@ export default function Product() {
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-[#F2E8D8]/10">
-                            <th className="text-left pb-3 font-mono text-[10px] text-[#F2E8D8]/35 tracking-widest uppercase font-normal">Layer</th>
-                            <th className="text-left pb-3 font-mono text-[10px] text-[#F2E8D8]/35 tracking-widest uppercase font-normal">Material</th>
-                            <th className="text-right pb-3 font-mono text-[10px] text-[#F2E8D8]/35 tracking-widest uppercase font-normal">μm</th>
+                            <th className="text-left pb-3 font-mono text-[10px] text-[#F2E8D8]/60 tracking-widest uppercase font-normal">Layer</th>
+                            <th className="text-left pb-3 font-mono text-[10px] text-[#F2E8D8]/60 tracking-widest uppercase font-normal">Material</th>
+                            <th className="text-right pb-3 font-mono text-[10px] text-[#F2E8D8]/60 tracking-widest uppercase font-normal">μm</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -354,8 +601,8 @@ export default function Product() {
                             className="h-px bg-[#F2E8D8]/15"
                           />
                           <span className="text-buckram pt-5">{card.icon}</span>
-                          <p className="font-display font-bold text-[#F2E8D8] text-2xl tracking-tight leading-tight">{card.label}</p>
-                          <p className="text-xs text-[#F2E8D8]/40 leading-relaxed">{card.body}</p>
+                          <p className="font-display font-bold text-[#F2E8D8] text-[28px] tracking-tight leading-tight">{card.label}</p>
+                          <p className="text-[14px] text-[#F2E8D8]/80 leading-relaxed">{card.body}</p>
                         </motion.div>
                       ))}
                     </div>
@@ -389,60 +636,138 @@ export default function Product() {
 
       {/* ── Layer 02: Drone + SDR ── */}
       <section className="bg-card/60 overflow-hidden relative" style={syLg}>
-        <div className="absolute -left-40 top-20 w-[500px] h-[500px] rounded-full bg-bunglehouse/18 blur-3xl" />
         <div className={`relative ${WRAP}`}>
-          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <StepIndicator active="0.2" light />
-          </motion.div>
-          <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
-            <h2 className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight">
-              {['Drone', '+ SDR'].map((word, i) => (
-                <div key={word} className="overflow-hidden">
-                  <motion.span
-                    initial={{ y: '110%', skewY: 4 }}
-                    whileInView={{ y: '0%', skewY: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 + i * 0.18, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-                    className="block"
-                  >
-                    {word}
-                  </motion.span>
-                </div>
-              ))}
-            </h2>
-            <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <p className="text-base text-ink-muted leading-relaxed mb-6">
-                The drone emits a controlled RF signal that remotely activates the passive sensor film attached
-                to the pipe wall. No physical contact. No pipeline shutdown.
-              </p>
-              <p className="text-base text-ink-muted leading-relaxed mb-10">
-                The on-board SDR captures the acoustic response at full fidelity — preserving amplitude, phase,
-                and frequency data for downstream AI processing.
-              </p>
-              <div className="flex flex-col gap-8 mb-12">
+          <div className="grid grid-cols-[2fr_3fr] gap-24 md:gap-40 min-h-[70vh] -ml-12 md:-ml-24 -mr-12 md:-mr-24">
+
+            {/* ── Left: step + heading + nav list ── */}
+            <div className="flex flex-col pl-6 md:pl-8">
+              <SectionLoader number={2.0} light />
+              <motion.h2
+                className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight mb-14 whitespace-nowrap"
+                initial={{ clipPath: 'inset(0 0 100% 0)', skewY: 3 }}
+                whileInView={{ clipPath: 'inset(0 0 -30% 0)', skewY: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Drone <br></br>+ SDR
+              </motion.h2>
+
+              <motion.div variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                className="flex flex-col self-start">
                 {[
-                  { label: 'Acoustic Excitation', body: 'Wall anomalies produce measurable distortions in the reflected wavefield — detectable at <1mm crack depth.', color: 'buckram' },
-                  { label: 'IQ Data Capture',     body: 'SDR captures raw IQ data at [X] MSPS — preserving full signal information for AI inference.', color: 'bunglehouse' },
-                  { label: 'Autonomous Flight',   body: 'Onboard LiDAR + GPS maintains optimal standoff geometry. No pilot required.', color: 'ruskin' },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <LightTag color={item.color}>{item.label}</LightTag>
-                    <p className="text-sm text-ink-muted leading-relaxed mt-3">{item.body}</p>
-                  </div>
+                  'IQ Data\nAcquisition',
+                  'Power Spectrum\nFrequency Domain',
+                  'Spectrogram\nTime-Frequency',
+                ].map((label, i) => (
+                  <button key={i} onClick={() => setActiveTabSDR(i)}
+                    className={`flex items-start gap-3 py-5 border-b border-ink/10 text-left transition-colors duration-300
+                      ${activeTabSDR === i ? 'text-ink' : 'text-ink-muted/40 hover:text-ink-muted/70'}`}>
+                    <span className="font-display text-base leading-snug tracking-tight">
+                      {label.split('\n').map((line, j) => <span key={j} className="block">{line}</span>)}
+                      <sup className="font-mono text-[10px] tracking-widest opacity-50 ml-0.5">
+                        {String(i + 1).padStart(2, '0')}
+                      </sup>
+                    </span>
+                    <span className={`mt-1 text-buckram text-lg leading-none transition-opacity duration-300 ${activeTabSDR === i ? 'opacity-100' : 'opacity-0'}`}>•</span>
+                  </button>
                 ))}
-              </div>
-              <div className="flex gap-3">
-                <PillButton light>Details</PillButton>
-                <PillButton light>Video</PillButton>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
+
+            {/* ── Right: content panel ── */}
+            <div className="flex flex-col justify-center pr-4 md:pr-8">
+              <AnimatePresence mode="wait">
+
+                {activeTabSDR === 0 && (
+                  <motion.div key="iq"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-8">
+                    <p className="text-lg text-ink-muted leading-relaxed">
+                    A Software Defined Radio (SDR) digitises incoming radio signals and outputs IQ data — two continuous streams that together capture the complete state of the signal: both its strength and its phase. Everything our system detects is derived from this single raw stream.
+                    </p>
+                    <p className="text-lg text-ink-muted leading-relaxed">
+                    The drone transmits a 915 MHz carrier. The patch antenna receives it, powers the circuit, and re-radiates a modified backscatter signal. That backscatter carries encoded information about the pipe's structural state. The SDR captures it as IQ samples.
+                    </p>
+                    <div className="border-l-2 border-buckram/60 pl-5 py-1">
+                      <p className="font-mono text-xl text-ink font-semibold tracking-wide">s(t) = I(t) + jQ(t)</p>
+                    </div>
+                    <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase mt-6">From IQ alone we recover</p>
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        { label: 'Instantaneous amplitude', formula: 'A(t) = √(I² + Q²)' },
+                        { label: 'Instantaneous phase',     formula: 'φ(t) = arctan(Q/I)' },
+                        { label: 'Instantaneous frequency', formula: 'f(t) = (1/2π) · dφ/dt' },
+                      ].map((item, i) => (
+                        <div key={i} className="border-l-2 border-ink/30 pl-4 py-1">
+                          <p className="font-mono text-sm text-ink font-medium tracking-wide">{item.formula}</p>
+                          <p className="font-mono text-xs text-ink-muted font-medium tracking-widest uppercase mt-1.5">{item.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <ConstellationViz />
+                  </motion.div>
+                )}
+
+                {activeTabSDR === 1 && (
+                  <motion.div key="spectrum"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-7">
+                    <div>
+                      <p className="text-lg text-ink-muted leading-relaxed">FFT with Hann or Blackman-Harris window to suppress spectral leakage. Output: power spectral density (PSD) in dB.</p>
+                    </div>
+                    <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase">What it reveals</p>
+                    <div className="flex flex-col gap-5">
+                      {[
+                        { label: 'Carrier confirmation',   body: '915 MHz peak confirms the patch antenna is receiving RF energy and the MOSFET is in its default ON state.', formula: null },
+                        { label: 'Sideband detection',     body: 'MOSFET toggling at rate f_mod amplitude-modulates the backscatter, creating sidebands at:', formula: 'f_carrier ± f_mod' },
+                        { label: 'Modulation depth',       body: 'Proxy for defect severity — deeper crack → stronger piezo response → higher M:', formula: 'M = (A_max − A_min) / (A_max + A_min)' },
+                        { label: 'Frequency deviation Δf', body: 'Crack alters acoustic propagation, shifting sidebands from expected position:', formula: 'f_sideband = f_carrier ± (f_mod + Δf)' },
+                      ].map((item, i) => (
+                        <div key={i} className="border-l-2 border-ink/20 pl-5 py-1">
+                          <p className="text-base font-semibold text-ink mb-1">{item.label}</p>
+                          <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>
+                          {item.formula && <p className="font-mono text-sm text-ink/80 tracking-wide mt-2">{item.formula}</p>}
+                        </div>
+                      ))}
+                    </div>
+                    <SpectrumViz />
+                  </motion.div>
+                )}
+
+                {activeTabSDR === 2 && (
+                  <motion.div key="spectrogram"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-7">
+                    <div>
+                      <p className="text-lg text-ink-muted leading-relaxed">Short-Time Fourier Transform (STFT) — overlapping windowed frames, each FFT'd independently. Output: 2D frequency-vs-time map with amplitude encoded as colour.</p>
+                    </div>
+                    <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase">What it reveals</p>
+                    <div className="flex flex-col gap-5">
+                      {[
+                        { label: 'Excitation event',       body: 'Initial guided wave launch appears as a broadband burst at t = 0, localised to the excitation frequency band.', formula: null },
+                        { label: 'Mode arrivals — S0 & A0', body: 'S0 (symmetric) arrives faster, non-dispersive. A0 (asymmetric) arrives slower, highly dispersive. Healthy pipe: S0 dominant, minimal A0.', formula: null },
+                        { label: 'Crack localisation',     body: 'Reflected packet arrival time Δt gives axial crack position:', formula: 'd_crack = v_group × Δt / 2' },
+                        { label: 'Mode conversion S0 → A0', body: 'Structural discontinuities convert energy from S0 to A0 — secondary lower-frequency arrival with higher dispersion. Greater converted energy = larger defect.', formula: null },
+                        { label: 'Dispersion behaviour',   body: 'A0 dispersion varies with crack state (partially vs. fully open), enabling defect classification beyond binary presence/absence.', formula: null },
+                      ].map((item, i) => (
+                        <div key={i} className="border-l-2 border-ink/20 pl-5 py-1">
+                          <p className="text-base font-semibold text-ink mb-1">{item.label}</p>
+                          <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>
+                          {item.formula && <p className="font-mono text-sm text-ink/80 tracking-wide mt-2">{item.formula}</p>}
+                        </div>
+                      ))}
+                    </div>
+                    <SpectrogramViz />
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
+            </div>
+
           </div>
-          <motion.div
-            variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="mt-16 ml-[38%] -mr-12 md:-mr-24"
-          >
-            <LightImgCard label="Drone + SDR hardware in field" className="aspect-video rounded-3xl" />
-          </motion.div>
         </div>
       </section>
 
@@ -451,11 +776,10 @@ export default function Product() {
         <div className="absolute -right-40 -bottom-40 w-[500px] h-[500px] rounded-full bg-ruskin/18 blur-3xl" />
         <div className="absolute left-0 top-0 w-[400px] h-[400px] rounded-full bg-buckram/12 blur-3xl" />
         <div className={`relative ${WRAP}`}>
-          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <StepIndicator active="0.3" light />
-          </motion.div>
           <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
-            <h2 className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight">
+            <div>
+              <SectionLoader number={3.0} light />
+              <h2 className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight">
               {['AI', 'Analysis'].map((word, i) => (
                 <div key={word} className="overflow-hidden">
                   <motion.span
@@ -470,6 +794,7 @@ export default function Product() {
                 </div>
               ))}
             </h2>
+            </div>
             <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <p className="text-base text-ink-muted leading-relaxed mb-10">
                 Raw IQ data is transformed into time-frequency spectrograms, then classified by our trained
