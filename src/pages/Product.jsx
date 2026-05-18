@@ -414,70 +414,100 @@ function GradCAMViz() {
 }
 
 function HowItWorksSection() {
-  const sectionRef = useRef(null)
-  const totalSlides = HOW_STEPS.length + 1
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
-  const x = useTransform(scrollYProgress, [0, 1], ['0vw', `-${(totalSlides - 1) * 100}vw`])
-  const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
+  const [slide, setSlide] = useState(0)
+  const [dir, setDir] = useState(1)
+  const total = HOW_STEPS.length + 1
+
+  const go = (d) => {
+    setDir(d)
+    setSlide(s => Math.max(0, Math.min(total - 1, s + d)))
+  }
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft')  go(-1)
+      if (e.key === 'ArrowRight') go(1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [slide])
 
   return (
-    <section data-nav-dark ref={sectionRef} style={{ height: `${totalSlides * 100}vh`, scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <motion.div
-          style={{ x, width: `${totalSlides * 100}vw` }}
-          className="flex h-full"
-        >
-          {/* ── Slide 0: Title card ── */}
-          <div className="relative w-screen h-full flex-shrink-0 bg-[#0E0C0A] flex flex-col justify-between px-12 md:px-24 py-24">
+    <section data-nav-dark className="h-screen w-full relative overflow-hidden bg-[#0E0C0A]" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+
+      <AnimatePresence mode="wait" custom={dir}>
+        {slide === 0 ? (
+          <motion.div
+            key="title"
+            custom={dir}
+            initial={{ opacity: 0, x: dir * 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: dir * -40 }}
+            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+            className="absolute inset-0 flex flex-col justify-between px-12 md:px-24 py-24"
+          >
             <p className="font-mono text-xs text-[#F2E8D8] tracking-widest uppercase">System Overview</p>
             <div>
               <h2 className="font-display font-semibold text-[#F2E8D8] text-[clamp(4rem,10vw,10rem)] leading-[0.9] tracking-tight mb-12">
-                {['How It', 'Works'].map((word, i) => (
-                  <motion.div
-                    key={word}
-                    initial={{ clipPath: 'inset(0 0 100% 0)', skewY: 3 }}
-                    whileInView={{ clipPath: 'inset(0 0 -30% 0)', skewY: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 + i * 0.2, duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="block"
-                  >
-                    {word}
-                  </motion.div>
-                ))}
+                <span className="block">How It</span>
+                <span className="block">Works</span>
               </h2>
-              <div className="flex items-center gap-6">
-                <p className="font-mono text-xs text-[#F2E8D8] tracking-widest">IN 6 STEPS</p>
-                <div className="relative w-40 h-px bg-[#F2E8D8]/50">
-                  <motion.div style={{ width: progressWidth }} className="absolute inset-y-0 left-0 bg-[#F2E8D8]/50" />
-                </div>
-                <p className="font-mono text-xs text-[#F2E8D8] tracking-widest">SCROLL →</p>
+              <p className="font-mono text-xs text-[#F2E8D8]/60 tracking-widest">IN 6 STEPS</p>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={slide}
+            custom={dir}
+            initial={{ opacity: 0, x: dir * 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: dir * -40 }}
+            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+            className="absolute inset-0"
+          >
+            <img src={HOW_STEPS[slide - 1].img} alt={HOW_STEPS[slide - 1].title} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 px-12 md:px-24 pb-20">
+              <div className="inline-flex flex-col backdrop-blur-md bg-black/30 rounded-2xl px-7 py-6 max-w-lg">
+                <p className="font-mono text-xs text-white/50 tracking-widest mb-3">
+                  {String(slide).padStart(2, '0')} / {HOW_STEPS.length}
+                </p>
+                <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight mb-3">
+                  {HOW_STEPS[slide - 1].title}
+                </h3>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  {HOW_STEPS[slide - 1].body}
+                </p>
               </div>
             </div>
-          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* ── Slides 1–6: Photo cards ── */}
-          {HOW_STEPS.map((step, i) => (
-            <div key={i} className="relative w-screen h-full flex-shrink-0">
-              <img src={step.img} alt={step.title} className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute bottom-0 left-0 right-0 px-12 md:px-24 pb-20">
-                <div className="inline-flex flex-col backdrop-blur-md bg-black/30 rounded-2xl px-7 py-6 max-w-lg">
-                  <p className="font-mono text-xs text-white/50 tracking-widest mb-3">
-                    {String(i + 1).padStart(2, '0')} / {HOW_STEPS.length}
-                  </p>
-                  <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-white/70 text-sm leading-relaxed">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </motion.div>
+      {/* Arrow buttons */}
+      <div className="absolute bottom-10 right-12 md:right-24 flex items-center gap-3 z-10">
+        <button
+          onClick={() => go(-1)}
+          disabled={slide === 0}
+          className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed backdrop-blur-sm"
+        >
+          ←
+        </button>
+        <button
+          onClick={() => go(1)}
+          disabled={slide === total - 1}
+          className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed backdrop-blur-sm"
+        >
+          →
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-12 left-12 md:left-24 flex gap-2 z-10">
+        {Array.from({ length: total }).map((_, i) => (
+          <button key={i} onClick={() => { setDir(i > slide ? 1 : -1); setSlide(i) }}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === slide ? 'bg-white scale-125' : 'bg-white/30'}`}
+          />
+        ))}
       </div>
     </section>
   )
