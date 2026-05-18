@@ -10,6 +10,7 @@ import sensorPatch from '../assets/sensor-patch.png'
 import howitworks1 from '../assets/howitworks1.png'
 import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
 import materialsciencehomepage from '../assets/materialsciencehomepage.png'
+import aimain from '../assets/aimainpage.jpg'
 
 const CORROSION_IMGS = [corrosion1, corrosion2, corrosion3]
 
@@ -196,8 +197,8 @@ export default function Home() {
             {
               tag: 'AI Analysis', color: 'text-bunglehouse',
               label: 'Real-time defect classification',
-              img: spectrogramDiagram,
-              imgClass: 'object-cover',
+              img: aimain,
+              imgClass: 'object-cover object-center',
               body: 'IQ data is converted to time-frequency spectrograms via STFT, then classified by our trained model. Output: a colour-coded pipeline health map with GPS-tagged defect locations and severity scores.',
               stats: ['STFT spectrogram', 'Defect classification', 'GPS health map'],
             },
@@ -230,7 +231,7 @@ export default function Home() {
 
       {/* ── Wide image + statement ── */}
       <section className={WRAP} style={sb}>
-        <ImgCard label="Drone in field — aerial inspection shot" className="w-full aspect-[16/7] mb-14" />
+        {/* <ImgCard label="Drone in field — aerial inspection shot" className="w-full aspect-[16/7] mb-14" /> */}
         <motion.div
           variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="flex flex-col items-center text-center gap-8"
@@ -245,27 +246,6 @@ export default function Home() {
             Explore the Product →
           </Link>
         </motion.div>
-      </section>
-
-      {/* ── Team teaser ── */}
-      <section className={WRAP} style={sy}>
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center md:text-left">
-            <div className="mb-8"><Tag>About Us</Tag></div>
-            <p className="font-display font-semibold text-fg text-3xl md:text-4xl leading-tight tracking-tight mb-10">
-              UNSW engineers who refused to accept "that's how it's always been done."
-            </p>
-            <Link
-              to="/about"
-              className="font-mono text-xs tracking-widest uppercase text-fg/60 hover:text-buckram transition-all duration-300 px-5 py-2.5 rounded-full bg-fg/5 backdrop-blur-sm border border-fg/15 hover:bg-buckram/10 hover:border-buckram/30"
-            >
-              Meet the Team →
-            </Link>
-          </motion.div>
-          <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <ImgCard label="Team photo" className="aspect-[4/3]" />
-          </motion.div>
-        </div>
       </section>
 
     </main>

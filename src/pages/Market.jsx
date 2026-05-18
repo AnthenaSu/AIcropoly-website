@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import CountUp from '../components/CountUp'
+import marketBg from '../assets/marketbg.jpg'
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
@@ -122,12 +123,10 @@ export default function Market() {
 
       {/* Hero */}
       <section data-nav-dark className="h-screen w-full relative overflow-hidden">
-        <div className="absolute inset-0 bg-ink" />
-        <div className="absolute -left-60 top-20 w-[700px] h-[700px] rounded-full bg-buckram/20 blur-3xl" />
-        <div className="absolute right-0 bottom-0 w-[500px] h-[500px] rounded-full bg-ruskin/15 blur-3xl" />
+        <img src={marketBg} alt="" className="absolute inset-0 w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-ink/60" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.div variants={rise(0.1)} initial="hidden" animate="visible" className="mb-8">
-            <Tag color="sand">Part 1 · The Problem</Tag>
           </motion.div>
           <motion.h1
             variants={rise(0.25)} initial="hidden" animate="visible"
@@ -178,7 +177,6 @@ export default function Market() {
       <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="mb-16 text-center">
-          <Tag>Part 2 · Our Solution</Tag>
         </motion.div>
         <motion.p variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="font-display font-semibold text-fg text-[clamp(2rem,4.5vw,5rem)] leading-tight tracking-tight text-center max-w-4xl mx-auto mb-24">
@@ -210,56 +208,6 @@ export default function Market() {
         </div>
       </section>
 
-      {/* Full capability comparison */}
-      <section className="bg-card/40" style={sy}>
-        <div className={WRAP}>
-          <motion.p variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="font-mono text-sm tracking-widest uppercase text-fg font-medium text-center mb-16">
-            Full Capability Comparison
-          </motion.p>
-          <motion.div variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left pb-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">Method</th>
-                  <th className="pb-6 px-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">H₂ Micro-crack</th>
-                  <th className="pb-6 px-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">No Shutdown</th>
-                  <th className="pb-6 px-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">AI-Powered</th>
-                  <th className="pb-6 px-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">Continuous</th>
-                  <th className="pb-6 px-6 font-mono text-sm tracking-wide uppercase font-semibold text-fg">Cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {FULL_COMPARE.map((c, i) => (
-                  <tr key={i} className={`border-b border-border last:border-0 transition-colors ${c.method === 'PipeGuard AI' ? 'bg-buckram/8' : 'hover:bg-card/60'}`}>
-                    <td className="py-8 font-display font-semibold text-2xl text-fg pr-12 tracking-tight">{c.method}</td>
-                    <td className="py-8 px-6 text-center"><Tick yes={c.h2crack} warn={c.warn} /></td>
-                    <td className="py-8 px-6 text-center"><Tick yes={c.noShutdown} /></td>
-                    <td className="py-8 px-6 text-center"><Tick yes={c.ai} /></td>
-                    <td className="py-8 px-6 text-center"><Tick yes={c.continuous} /></td>
-                    <td className="py-8 px-6 text-center">
-                      {c.method === 'PipeGuard AI'
-                        ? <Tag color="buckram">{c.cost}</Tag>
-                        : <span className="font-mono text-base text-fg">{c.cost}</span>}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </motion.div>
-
-          <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="mt-20 bg-parchment border border-border/60 rounded-2xl p-10 text-center max-w-2xl mx-auto">
-            <p className="font-display font-bold text-fg text-[clamp(3rem,6vw,5rem)] leading-none tracking-tight mb-4">
-              18–36<span className="text-fg/40 text-3xl"> months</span>
-            </p>
-            <p className="font-mono text-sm tracking-wide uppercase text-fg-muted font-medium">
-              Technology first-mover window before any competitor can replicate the integrated system
-            </p>
-          </motion.div>
-        </div>
-      </section>
 
       {/* ════════════════════════════
           PART 3 — MARKET SIZE
@@ -270,7 +218,6 @@ export default function Market() {
         <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="mb-16 text-center">
-            <Tag>Part 3 · Market Size</Tag>
           </motion.div>
           <motion.p variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="font-display font-semibold text-fg text-[clamp(2rem,4vw,4rem)] leading-tight tracking-tight text-center mb-24 max-w-3xl mx-auto">
@@ -284,7 +231,7 @@ export default function Market() {
             ].map((m, i) => (
               <motion.div key={i} variants={rise(i * 0.12)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                 <Tag>{m.label} · {m.sub}</Tag>
-                <p className="font-display font-bold text-fg text-[clamp(4rem,8vw,8rem)] mt-10 mb-6 leading-none tracking-tight">
+                <p className="font-display font-bold text-fg text-[clamp(2rem,4vw,4rem)] mt-10 mb-6 leading-none tracking-tight">
                   <CountUp to={m.to} decimals={m.decimals} prefix={m.prefix} suffix={m.suffix} />
                 </p>
                 <p className="font-mono text-sm text-fg-muted tracking-wide">{m.note}</p>
@@ -295,7 +242,7 @@ export default function Market() {
       </section>
 
       {/* Regional cards */}
-      <section className="bg-card/40" style={sy}>
+      {/* <section className="bg-card/40" style={sy}>
         <div className={WRAP}>
           <motion.p variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="font-mono text-sm tracking-widest uppercase text-fg font-medium text-center mb-16">
@@ -322,7 +269,6 @@ export default function Market() {
         </div>
       </section>
 
-      {/* Tier 1 customer table */}
       <section className={WRAP} style={sy}>
         <motion.p variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="font-mono text-sm tracking-widest uppercase text-fg font-medium text-center mb-16">
@@ -353,7 +299,7 @@ export default function Market() {
             </tbody>
           </table>
         </motion.div>
-      </section>
+      </section> */}
 
       {/* ════════════════════════════
           PART 4 — PRICING MODEL
@@ -364,7 +310,6 @@ export default function Market() {
         <div className={`relative ${WRAP}`}>
           <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="mb-16 text-center">
-            <Tag color="sand">Part 4 · Pricing Model</Tag>
           </motion.div>
           <motion.p variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="font-display font-semibold text-[#F2E8D8] text-[clamp(2rem,4vw,4.5rem)] leading-tight tracking-tight text-center mb-24 max-w-3xl mx-auto">
@@ -437,7 +382,7 @@ export default function Market() {
       {/* ════════════════════════════
           PART 5 — EXPECTED RETURNS
       ════════════════════════════ */}
-
+{/* 
       <section className={WRAP} style={sy}>
         <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
           className="mb-16 text-center">
@@ -495,7 +440,7 @@ export default function Market() {
             </tbody>
           </table>
         </motion.div>
-      </section>
+      </section> */}
 
       {/* CTA */}
       <section className={WRAP} style={{ paddingTop: '2rem', paddingBottom: '9rem' }}>
