@@ -9,6 +9,7 @@ import howitworks4 from '../assets/howitworks4.png'
 import howitworks5 from '../assets/howitworks5.png'
 import howitworks6 from '../assets/howitworks6.png'
 import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
+import aiDiagram from '../assets/ai.jpg'
 
 function SectionLoader({ number, light = false }) {
   const ref = useRef(null)
@@ -346,6 +347,72 @@ function ConstellationViz() {
   )
 }
 
+function GradCAMViz() {
+  const canvasRef = useRef(null)
+  const [mode, setMode] = useState('healthy')
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+    const render = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (!rect.width) return
+      const W = rect.width, H = rect.height
+      canvas.width = W * dpr; canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.fillStyle = '#0d0f0e'; ctx.fillRect(0, 0, W, H)
+      const N = 100
+      const padL = W * 0.07, padR = W * 0.03, padT = H * 0.1, padB = H * 0.22
+      const gW = W - padL - padR, gH = H - padT - padB
+      const saliency = Array.from({ length: N }, (_, i) => {
+        if (mode === 'healthy') return 0.04 + Math.random() * 0.07
+        const p1 = Math.exp(-((i - 28) ** 2) / 16) * 0.92
+        const p2 = Math.exp(-((i - 63) ** 2) / 10) * 0.78
+        return Math.min(1, p1 + p2 + Math.random() * 0.07)
+      })
+      const barW = gW / N * 0.78
+      for (let i = 0; i < N; i++) {
+        const x = padL + (i / N) * gW
+        const bH = saliency[i] * gH
+        const y = padT + gH - bH
+        let r, g, b
+        if (saliency[i] < 0.25) { r = 70; g = 100; b = 130 }
+        else if (saliency[i] < 0.55) { const v = (saliency[i] - 0.25) / 0.3; r = Math.round(70 + v * 130); g = Math.round(100 - v * 10); b = Math.round(130 - v * 90) }
+        else { const v = Math.min(1, (saliency[i] - 0.55) / 0.45); r = Math.round(200 + v * 15); g = Math.round(90 - v * 50); b = 40 }
+        ctx.fillStyle = `rgba(${r},${g},${b},0.88)`
+        ctx.fillRect(x, y, barW, bH)
+      }
+      ctx.fillStyle = 'rgba(242,232,216,0.28)'; ctx.font = `${Math.round(W * 0.023)}px monospace`
+      ctx.fillText('50 kHz', padL, H - padB * 0.18)
+      ctx.fillText('100 kHz', padL + gW * 0.44, H - padB * 0.18)
+      ctx.fillText('150 kHz', padL + gW * 0.87, H - padB * 0.18)
+      ctx.save(); ctx.translate(W * 0.015, padT + gH / 2); ctx.rotate(-Math.PI / 2)
+      ctx.fillText('saliency', -18, 0); ctx.restore()
+      if (mode === 'crack') {
+        ctx.fillStyle = 'rgba(200,120,40,0.9)'; ctx.font = `${Math.round(W * 0.026)}px monospace`
+        ctx.fillText('f₁', padL + gW * 0.24, padT + gH * 0.06)
+        ctx.fillText('f₂', padL + gW * 0.6, padT + gH * 0.2)
+      }
+    }
+    const ro = new ResizeObserver(render); ro.observe(canvas); render()
+    return () => ro.disconnect()
+  }, [mode])
+  return (
+    <div className="mt-4 flex flex-col gap-3">
+      <div className="flex gap-2">
+        {[['healthy', 'Healthy Pipe'], ['crack', 'Crack Detected']].map(([v, l]) => (
+          <button key={v} onClick={() => setMode(v)} className={`font-mono font-semibold text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full border transition-all duration-200 ${mode === v ? 'bg-buckram/10 border-buckram/40 text-buckram' : 'bg-ink/5 border-ink/25 text-ink-muted hover:border-ink/40 hover:text-ink'}`}>{l}</button>
+        ))}
+      </div>
+      <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
+      <p className="font-mono text-[13px] text-ink-muted tracking-widest">
+        {mode === 'healthy' ? 'Uniform low saliency — no frequency band dominates classification' : 'f₁ ~78 kHz, f₂ ~113 kHz highlighted — cross-checked against pipe resonance modes'}
+      </p>
+    </div>
+  )
+}
+
 function HowItWorksSection() {
   const sectionRef = useRef(null)
   const totalSlides = HOW_STEPS.length + 1
@@ -419,6 +486,7 @@ function HowItWorksSection() {
 export default function Product() {
   const [activeTab, setActiveTab] = useState(0)
   const [activeTabSDR, setActiveTabSDR] = useState(0)
+  const [activeTabAI,  setActiveTabAI]  = useState(0)
 
   return (
     <main className="bg-parchment" style={{ scrollSnapType: 'y mandatory' }}>
@@ -788,66 +856,167 @@ export default function Product() {
         <div className="absolute -right-40 -bottom-40 w-[500px] h-[500px] rounded-full bg-ruskin/18 blur-3xl" />
         <div className="absolute left-0 top-0 w-[400px] h-[400px] rounded-full bg-buckram/12 blur-3xl" />
         <div className={`relative ${WRAP}`}>
-          <div className="grid grid-cols-[2fr_3fr] gap-16 md:gap-24 items-start">
-            <div>
+          <div className="grid grid-cols-[2fr_3fr] gap-24 md:gap-40 min-h-[70vh] -ml-12 md:-ml-24 -mr-12 md:-mr-24">
+
+            {/* ── Left: step + heading + nav list ── */}
+            <div className="flex flex-col pl-6 md:pl-8">
               <SectionLoader number={3.0} light />
-              <h2 className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight">
-              {['AI', 'Analysis'].map((word, i) => (
-                <div key={word} className="overflow-hidden">
-                  <motion.span
-                    initial={{ y: '110%', skewY: 4 }}
-                    whileInView={{ y: '0%', skewY: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 + i * 0.18, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-                    className="block"
-                  >
-                    {word}
-                  </motion.span>
-                </div>
-              ))}
-            </h2>
+              <motion.h2
+                className="font-display font-semibold text-ink text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight mb-14"
+                initial={{ clipPath: 'inset(0 0 100% 0)', skewY: 3 }}
+                whileInView={{ clipPath: 'inset(0 0 -30% 0)', skewY: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              >
+                AI<br />Analysis
+              </motion.h2>
+
+              <motion.div variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                className="flex flex-col self-start">
+                {[
+                  'Layer 1\n1D-CNN Classifier',
+                  'Layer 2\nAutoencoder',
+                  'Layer 3\nGrad-CAM',
+                ].map((label, i) => (
+                  <button key={i} onClick={() => setActiveTabAI(i)}
+                    className={`flex items-start gap-3 py-5 border-b border-ink/10 text-left transition-colors duration-300
+                      ${activeTabAI === i ? 'text-ink' : 'text-ink-muted/40 hover:text-ink-muted/70'}`}>
+                    <span className="font-display text-base leading-snug tracking-tight">
+                      {label.split('\n').map((line, j) => <span key={j} className="block">{line}</span>)}
+                      <sup className="font-mono text-[10px] tracking-widest opacity-50 ml-0.5">
+                        {String(i + 1).padStart(2, '0')}
+                      </sup>
+                    </span>
+                    <span className={`mt-1 text-buckram text-lg leading-none transition-opacity duration-300 ${activeTabAI === i ? 'opacity-100' : 'opacity-0'}`}>•</span>
+                  </button>
+                ))}
+              </motion.div>
             </div>
-            <motion.div variants={rise(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <p className="text-base text-ink-muted leading-relaxed mb-10">
-                Raw IQ data is transformed into time-frequency spectrograms, then classified by our trained
-                model. Output is a colour-coded pipeline health map with GPS-tagged defect locations.
-              </p>
-              <div className="flex flex-col gap-8 mb-12">
-                {[
-                  { step: '01 — Preprocessing', body: 'IQ data → time-frequency spectrograms via Short-Time Fourier Transform.',     color: 'muted' },
-                  { step: '02 — Inference',      body: '[Model]. Trained on [X] labelled spectrograms across [X] defect classes.',    color: 'muted' },
-                  { step: '03 — Output',         body: 'Defect type, severity, and GPS location delivered as a pipeline health map.', color: 'muted' },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <LightTag color={item.color}>{item.step}</LightTag>
-                    <p className="text-sm text-ink-muted leading-relaxed mt-3">{item.body}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-3 gap-4 mb-12">
-                {[
-                  { val: '[X]%',   label: 'Accuracy',      color: 'text-buckram' },
-                  { val: '[X] ms', label: 'Latency',        color: 'text-bunglehouse' },
-                  { val: '[X]',    label: 'Defect classes', color: 'text-ruskin' },
-                ].map((s, i) => (
-                  <div key={i} className="text-center py-7 bg-ink/5 backdrop-blur-sm border border-ink/10 rounded-2xl">
-                    <p className={`font-display font-bold text-3xl mb-2 leading-none tracking-tight ${s.color}`}>{s.val}</p>
-                    <p className="font-mono text-xs text-ink-muted/70">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-3">
-                <PillButton light>Details</PillButton>
-                <PillButton light>Live Demo</PillButton>
-              </div>
-            </motion.div>
+
+            {/* ── Right: content panel ── */}
+            <div className="flex flex-col justify-center pr-4 md:pr-8">
+              <AnimatePresence mode="wait">
+
+                {/* Layer 1: 1D-CNN */}
+                {activeTabAI === 0 && (
+                  <motion.div key="cnn"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-8">
+                    <p className="text-lg text-ink-muted leading-relaxed">
+                      A 1D-CNN that operates on the frequency axis. Rather than treating IQ values as raw numbers, it learns the <em>shape</em> of frequency-domain responses — the systematic differences between a healthy pipe and one affected by hydrogen embrittlement.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <p className="font-mono text-xs text-ink-muted/60 tracking-widest uppercase mb-2">Architecture</p>
+                      {[
+                        { label: 'Input',          desc: '(batch, 2, 100)  ·  I(f) + Q(f)',             border: 'border-ink/20' },
+                        { label: 'Conv Block 1',    desc: '32 filters, k=7, padding=3  ·  BN + ReLU',    border: 'border-buckram/35' },
+                        { label: 'Conv Block 2',    desc: '64 filters, k=5, padding=2  ·  BN + ReLU',    border: 'border-buckram/45' },
+                        { label: 'Conv Block 3',    desc: '128 filters, k=5, padding=2  ·  BN + ReLU',   border: 'border-buckram/60' },
+                        { label: 'Conv Block 4',    desc: '64 filters, k=3, padding=1  ·  BN + ReLU',    border: 'border-buckram/45' },
+                        { label: 'Global Avg Pool', desc: '→ (batch, 64)',                                border: 'border-ink/20' },
+                        { label: 'Linear(64→32)',   desc: 'ReLU  ·  Dropout 0.3',                         border: 'border-ink/20' },
+                        { label: 'Linear(32→1)',    desc: 'Sigmoid  ·  threshold > 0.3 = crack detected', border: 'border-ruskin/50' },
+                      ].map((row, i) => (
+                        <div key={i} className={`border-l-2 ${row.border} pl-4 py-1.5`}>
+                          <p className="font-mono text-sm text-ink font-medium tracking-wide">{row.label}</p>
+                          <p className="font-mono text-xs text-ink-muted tracking-wide">{row.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-ink/5 border border-ink/10 rounded-2xl px-6 py-5">
+                      <p className="font-mono text-xs text-ink-muted/60 tracking-widest uppercase mb-3">Loss Function</p>
+                      <p className="font-mono text-base text-ink font-semibold tracking-wide">Asymmetric BCE</p>
+                      <p className="text-sm text-ink-muted mt-2 leading-relaxed">Miss penalty ×10. A missed crack costs far more than a false alarm — threshold set conservatively at 0.3 to maximise recall.</p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Layer 2: Autoencoder */}
+                {activeTabAI === 1 && (
+                  <motion.div key="autoencoder"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-8">
+                    <p className="text-lg text-ink-muted leading-relaxed">
+                      Trained exclusively on healthy pipe data. The autoencoder learns to reconstruct normal IQ signatures accurately. When it encounters a cracked pipe, reconstruction error spikes — no labelled defect data required.
+                    </p>
+                    <div className="grid grid-cols-3 gap-4">
+                      {[
+                        { title: 'Encoder',    color: 'border-buckram/40', lines: ['Conv(2→16, k=5) + ReLU', 'Conv(16→8, k=5) + ReLU', 'AdaptiveAvgPool', 'Flatten → Linear(8→16)'] },
+                        { title: 'Bottleneck', color: 'border-ruskin/50',  lines: ['z = 16 dims', 'compressed healthy', 'pipe signature'] },
+                        { title: 'Decoder',    color: 'border-buckram/40', lines: ['Linear(16→8) → Unflatten', 'Upsample(100)', 'Conv(8→16, k=5) + ReLU', 'Conv(16→2, k=5)'] },
+                      ].map((col, i) => (
+                        <div key={i} className={`border-l-2 ${col.color} pl-4 py-2`}>
+                          <p className="font-mono text-xs text-ink-muted/60 tracking-widest uppercase mb-3">{col.title}</p>
+                          {col.lines.map((line, j) => (
+                            <p key={j} className="font-mono text-xs text-ink tracking-wide leading-relaxed">{line}</p>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-ink/5 border border-ink/10 rounded-2xl px-6 py-5 flex flex-col gap-4">
+                      <div>
+                        <p className="font-mono text-xs text-ink-muted/60 tracking-widest uppercase mb-3">Anomaly Scoring</p>
+                        <p className="font-mono text-base text-ink font-semibold tracking-wide">score = MSE(input, reconstruction)</p>
+                      </div>
+                      <div className="border-t border-ink/10 pt-4">
+                        <p className="font-mono text-sm text-buckram font-semibold tracking-wide">threshold = 99th percentile</p>
+                        <p className="text-sm text-ink-muted mt-1 leading-relaxed">Calibrated on the healthy training set. Patches above threshold are flagged as anomalous — even if the CNN score is borderline.</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Layer 3: Grad-CAM */}
+                {activeTabAI === 2 && (
+                  <motion.div key="gradcam"
+                    initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex flex-col gap-8">
+                    <p className="text-lg text-ink-muted leading-relaxed">
+                      Gradient-weighted Class Activation Mapping on the final conv layer of the 1D-CNN. It answers: <em>which frequencies drove this classification?</em> Output is a 100-point frequency saliency map that engineers can cross-check against known pipe resonance modes.
+                    </p>
+                    <div className="flex flex-col gap-5">
+                      {[
+                        {
+                          label: 'How it works',
+                          body: 'Gradients of the crack-probability output are backpropagated to the last conv layer. Channel weights are multiplied by activations and spatially pooled — yielding a (100,) saliency vector, one value per frequency point.',
+                          formula: 'output shape: (100,)  ·  range 0–1 per frequency point',
+                        },
+                        {
+                          label: 'Physical consistency check',
+                          checks: [
+                            { yes: true,  text: 'Highlighted frequencies align with pipe resonance modes → decision has physical basis' },
+                            { yes: false, text: "Frequencies don't align → model may be learning noise, flagged for retraining" },
+                          ],
+                        },
+                      ].map((item, i) => (
+                        <div key={i} className="border-l-2 border-ink/20 pl-5 py-1">
+                          <p className="text-base font-semibold text-ink mb-2">{item.label}</p>
+                          {item.body && <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>}
+                          {item.formula && <p className="font-mono text-sm text-ink/70 tracking-wide mt-2">{item.formula}</p>}
+                          {item.checks && (
+                            <div className="flex flex-col gap-3 mt-2">
+                              {item.checks.map((c, j) => (
+                                <div key={j} className="flex items-start gap-3">
+                                  <span className={`font-semibold text-lg leading-none mt-0.5 ${c.yes ? 'text-buckram' : 'text-ruskin'}`}>{c.yes ? '✓' : '✗'}</span>
+                                  <p className="text-base text-ink-muted leading-relaxed">{c.text}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <GradCAMViz />
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
+            </div>
+
           </div>
-          <motion.div
-            variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="mt-16 ml-[38%] -mr-12 md:-mr-24"
-          >
-            <LightImgCard label="AI spectrogram output / pipeline health map" className="aspect-video rounded-3xl" />
-          </motion.div>
         </div>
       </section>
 
