@@ -56,7 +56,7 @@ export default function Navbar() {
             dark ? 'text-[#F2E8D8]' : 'text-fg'
           }`}
         >
-          AIcropoly
+          VEINPULSE
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
