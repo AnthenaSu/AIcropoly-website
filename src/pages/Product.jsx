@@ -8,7 +8,7 @@ import howitworks3 from '../assets/howitworks3.png'
 import howitworks4 from '../assets/howitworks4.png'
 import howitworks5 from '../assets/howitworks5.png'
 import howitworks6 from '../assets/howitworks6.png'
-import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
+import howitworks7 from '../assets/howitworks7.png'
 import aiDiagram from '../assets/ai.jpg'
 
 function SectionLoader({ number, light = false }) {
@@ -137,6 +137,7 @@ const HOW_STEPS = [
   { img: howitworks4, title: 'Defects reflect the waves',        body: 'Cracks, corrosion, or embrittlement scatter the waves back toward the patch with a distinct acoustic signature.' },
   { img: howitworks5, title: 'The patch "hears" the reflection', body: 'The same piezo film receives the returning waves and converts them back into a voltage shift — toggling the onboard MOSFET.' },
   { img: howitworks6, title: 'Drone reads the backscatter',      body: 'The MOSFET state change alters how the antenna re-radiates the signal. The drone reads that backscatter difference and pinpoints the defect — wirelessly, passively, instantly.' },
+  { img: howitworks7, title: 'AI delivers your report',          body: 'All signals — IQ constellation, frequency spectrum, spectrogram, and Grad-CAM saliency — are fused into a single diagnostic dashboard. Equipment health, estimated useful life, defect location, and prioritised action items delivered instantly to your team.', contain: true },
 ]
 
 function SpectrumViz() {
@@ -210,6 +211,86 @@ function SpectrumViz() {
   )
 }
 
+function SpectrogramAnnotation() {
+  return (
+    <div className="w-full rounded-2xl overflow-hidden border border-ink/10">
+      <svg viewBox="0 0 760 225" width="100%" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', background: '#0a0d0c' }}>
+        <defs>
+          <linearGradient id="s0g" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#5a8098" stopOpacity="0.95"/>
+            <stop offset="100%" stopColor="#5a8098" stopOpacity="0.6"/>
+          </linearGradient>
+          <linearGradient id="a0g" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#c87828" stopOpacity="0"/>
+            <stop offset="14%" stopColor="#c87828" stopOpacity="0.58"/>
+            <stop offset="100%" stopColor="#b05820" stopOpacity="0.48"/>
+          </linearGradient>
+          <linearGradient id="excG" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#f0e0c0" stopOpacity="0"/>
+            <stop offset="50%" stopColor="#f0e0c0" stopOpacity="0.52"/>
+            <stop offset="100%" stopColor="#f0e0c0" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="crG" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#c87828" stopOpacity="0"/>
+            <stop offset="50%" stopColor="#c87828" stopOpacity="0.88"/>
+            <stop offset="100%" stopColor="#c87828" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
+
+        {/* Axis lines */}
+        <line x1="68" y1="16" x2="68" y2="190" stroke="rgba(242,232,216,0.12)" strokeWidth="1"/>
+        <line x1="68" y1="190" x2="740" y2="190" stroke="rgba(242,232,216,0.12)" strokeWidth="1"/>
+        {/* Horizontal grid */}
+        {[60, 100, 145, 178].map(y => (
+          <line key={y} x1="68" y1={y} x2="740" y2={y} stroke="rgba(242,232,216,0.03)" strokeWidth="1"/>
+        ))}
+
+        {/* S0 mode — narrow, fast, non-dispersive */}
+        <rect x="70" y="74" width="668" height="15" fill="url(#s0g)" rx="3"/>
+
+        {/* A0 mode — slow, dispersive (spreads over time) */}
+        <polygon points="115,128 115,140 738,105 738,180" fill="url(#a0g)"/>
+
+        {/* Excitation burst at t=0 */}
+        <rect x="66" y="16" width="18" height="174" fill="url(#excG)"/>
+
+        {/* Crack reflection at Δt */}
+        <rect x="478" y="16" width="16" height="174" fill="url(#crG)"/>
+
+        {/* Δt dashed arrow */}
+        <line x1="76" y1="33" x2="486" y2="33" stroke="rgba(242,232,216,0.32)" strokeWidth="1" strokeDasharray="4 3"/>
+        <polygon points="76,29 76,37 68,33" fill="rgba(242,232,216,0.32)"/>
+        <polygon points="486,29 486,37 494,33" fill="rgba(242,232,216,0.32)"/>
+        <text x="281" y="29" fill="rgba(242,232,216,0.72)" fontSize="12" fontFamily="monospace" textAnchor="middle" fontWeight="600">Δt</text>
+        <text x="281" y="47" fill="rgba(242,232,216,0.35)" fontSize="9.5" fontFamily="monospace" textAnchor="middle">d = v_group × Δt / 2</text>
+
+        {/* S0 label */}
+        <text x="90" y="70" fill="#5a8098" fontSize="10" fontFamily="monospace" fontWeight="600">S0</text>
+        <text x="115" y="70" fill="rgba(90,128,152,0.7)" fontSize="9.5" fontFamily="monospace">fast · non-dispersive · symmetric</text>
+
+        {/* A0 label */}
+        <text x="90" y="198" fill="#c87828" fontSize="10" fontFamily="monospace" fontWeight="600">A0</text>
+        <text x="115" y="198" fill="rgba(200,120,40,0.7)" fontSize="9.5" fontFamily="monospace">slow · dispersive · asymmetric</text>
+
+        {/* Mode conversion annotation at crack */}
+        <text x="498" y="118" fill="rgba(200,120,40,0.85)" fontSize="9" fontFamily="monospace">S0 → A0</text>
+        <text x="498" y="130" fill="rgba(200,120,40,0.55)" fontSize="8.5" fontFamily="monospace">mode conversion</text>
+
+        {/* Bottom event labels */}
+        <line x1="75" y1="190" x2="75" y2="200" stroke="rgba(242,232,216,0.2)" strokeWidth="1"/>
+        <text x="75" y="211" fill="rgba(242,232,216,0.42)" fontSize="9" fontFamily="monospace" textAnchor="middle">Excitation  t = 0</text>
+
+        <line x1="486" y1="190" x2="486" y2="200" stroke="rgba(200,120,40,0.5)" strokeWidth="1"/>
+        <text x="486" y="211" fill="rgba(200,120,40,0.7)" fontSize="9" fontFamily="monospace" textAnchor="middle">Crack reflection</text>
+
+        {/* Axis labels */}
+        <text x="404" y="223" fill="rgba(242,232,216,0.18)" fontSize="9.5" fontFamily="monospace" textAnchor="middle">Time →</text>
+        <text x="14" y="103" fill="rgba(242,232,216,0.18)" fontSize="9.5" fontFamily="monospace" textAnchor="middle" transform="rotate(-90,14,103)">Freq</text>
+      </svg>
+    </div>
+  )
+}
+
 function SpectrogramViz() {
   const canvasRef = useRef(null)
   const [mode, setMode] = useState('no_defect')
@@ -262,16 +343,13 @@ function SpectrogramViz() {
   return (
     <div className="mt-5 flex flex-col gap-3">
       <div className="flex gap-2">
-        {[['no_defect', 'No Defect'], ['defect', 'Defect'], ['diagram', 'Diagram']].map(([v, l]) => (
+        {[['no_defect', 'No Defect'], ['defect', 'Defect']].map(([v, l]) => (
           <button key={v} onClick={() => setMode(v)} className={`font-mono font-semibold text-[12px] tracking-widest uppercase px-3 py-1.5 rounded-full border transition-all duration-200 ${mode === v ? 'bg-buckram/10 border-buckram/40 text-buckram' : 'bg-ink/5 border-ink/25 text-ink-muted hover:border-ink/40 hover:text-ink'}`}>{l}</button>
         ))}
       </div>
-      {mode === 'diagram'
-        ? <div className="w-full rounded-xl overflow-hidden bg-white flex items-center justify-center" style={{ height: '320px' }}><img src={spectrogramDiagram} alt="Spectrogram diagram" className="w-full h-full object-contain" /></div>
-        : <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
-      }
+      <canvas ref={canvasRef} className="w-full rounded-xl" style={{ height: '175px' }} />
       <p className="font-mono text-[13px] text-ink-muted tracking-widest">
-        {mode === 'no_defect' ? '915 MHz band stable — no reflection arrival' : mode === 'defect' ? 'Reflection burst at Δt — d_crack = v_group × Δt / 2' : 'A spectrogram maps acoustic wave frequencies over time to provide spatial localisation and diagnostics for guided wave events.'}
+        {mode === 'no_defect' ? '915 MHz band stable — no reflection arrival' : 'Reflection burst at Δt — d_crack = v_group × Δt / 2'}
       </p>
     </div>
   )
@@ -452,7 +530,7 @@ function HowItWorksSection() {
                 <span className="block">How It</span>
                 <span className="block">Works</span>
               </h2>
-              <p className="font-mono text-xs text-[#F2E8D8]/60 tracking-widest">IN 6 STEPS</p>
+              <p className="font-mono text-xs text-[#F2E8D8]/60 tracking-widest">IN 7 STEPS</p>
             </div>
           </motion.div>
         ) : (
@@ -465,7 +543,7 @@ function HowItWorksSection() {
             transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="absolute inset-0"
           >
-            <img src={HOW_STEPS[slide - 1].img} alt={HOW_STEPS[slide - 1].title} className="absolute inset-0 w-full h-full object-cover" />
+            <img src={HOW_STEPS[slide - 1].img} alt={HOW_STEPS[slide - 1].title} className={`absolute inset-0 w-full h-full ${HOW_STEPS[slide - 1].contain ? 'object-contain bg-[#0a0d0c]' : 'object-cover'}`} />
             <div className="absolute bottom-0 left-0 right-0 px-12 md:px-24 pb-20">
               <div className="inline-flex flex-col backdrop-blur-md bg-black/30 rounded-2xl px-7 py-6 max-w-lg">
                 <p className="font-mono text-xs text-white/50 tracking-widest mb-3">
@@ -850,26 +928,13 @@ export default function Product() {
                     <div>
                       <p className="text-lg text-ink-muted leading-relaxed">Short-Time Fourier Transform (STFT) — overlapping windowed frames, each FFT'd independently. Output: 2D frequency-vs-time map with amplitude encoded as colour.</p>
                     </div>
-                    <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase">What it reveals</p>
-                    <div className="flex flex-col gap-5">
-                      {[
-                        { label: 'Excitation event',       body: 'Initial guided wave launch appears as a broadband burst at t = 0, localised to the excitation frequency band.', formula: null },
-                        { label: 'Mode arrivals — S0 & A0', body: 'S0 (symmetric) arrives faster, non-dispersive. A0 (asymmetric) arrives slower, highly dispersive. Healthy pipe: S0 dominant, minimal A0.', formula: null },
-                        { label: 'Crack localisation',     body: 'Reflected packet arrival time Δt gives axial crack position:', formula: 'd_crack = v_group × Δt / 2' },
-                        { label: 'Mode conversion S0 → A0', body: 'Structural discontinuities convert energy from S0 to A0 — secondary lower-frequency arrival with higher dispersion. Greater converted energy = larger defect.', formula: null },
-                        { label: 'Dispersion behaviour',   body: 'A0 dispersion varies with crack state (partially vs. fully open), enabling defect classification beyond binary presence/absence.', formula: null },
-                      ].map((item, i) => (
-                        <motion.div key={i}
-                          initial={{ opacity: 0, y: 18 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                          className="border-l-2 border-ink/20 pl-5 py-1">
-                          <p className="text-base font-semibold text-ink mb-1">{item.label}</p>
-                          <p className="text-base text-ink-muted leading-relaxed">{item.body}</p>
-                          {item.formula && <p className="font-mono text-sm text-ink/80 tracking-wide mt-2">{item.formula}</p>}
-                        </motion.div>
-                      ))}
-                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <SpectrogramAnnotation />
+                    </motion.div>
                     <SpectrogramViz />
                   </motion.div>
                 )}
