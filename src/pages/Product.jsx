@@ -860,10 +860,10 @@ export default function Product() {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col gap-8">
                     <p className="text-lg text-ink-muted leading-relaxed">
-                    A Software Defined Radio (SDR) digitises incoming radio signals and outputs IQ data — two continuous streams that together capture the complete state of the signal: both its strength and its phase. Everything our system detects is derived from this single raw stream.
+                    An SDR digitises incoming RF signals as IQ data — two streams capturing signal strength and phase. Everything the system detects derives from this single raw stream.
                     </p>
                     <p className="text-lg text-ink-muted leading-relaxed">
-                    The drone transmits a 915 MHz carrier. The patch antenna receives it, powers the circuit, and re-radiates a modified backscatter signal. That backscatter carries encoded information about the pipe's structural state. The SDR captures it as IQ samples.
+                    The drone transmits a 915 MHz carrier. The patch receives it, powers the circuit, and re-radiates a modified backscatter encoding the pipe's structural state — captured by the SDR as IQ samples.
                     </p>
                     <div className="border-l-2 border-buckram/60 pl-5 py-1">
                       <p className="font-mono text-xl text-ink font-semibold tracking-wide">s(t) = I(t) + jQ(t)</p>
@@ -895,15 +895,14 @@ export default function Product() {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col gap-7">
                     <div>
-                      <p className="text-lg text-ink-muted leading-relaxed">FFT with Hann or Blackman-Harris window to suppress spectral leakage. Output: power spectral density (PSD) in dB.</p>
+                      <p className="text-lg text-ink-muted leading-relaxed">FFT with Hann or Blackman-Harris window. Output: power spectral density (PSD) in dB.</p>
                     </div>
                     <p className="font-mono text-sm font-medium text-ink tracking-widest uppercase">What it reveals</p>
                     <div className="flex flex-col gap-5">
                       {[
-                        { label: 'Carrier confirmation',   body: '915 MHz peak confirms the patch antenna is receiving RF energy and the MOSFET is in its default ON state.', formula: null },
-                        { label: 'Sideband detection',     body: 'MOSFET toggling at rate f_mod amplitude-modulates the backscatter, creating sidebands at:', formula: 'f_carrier ± f_mod' },
-                        { label: 'Modulation depth',       body: 'Proxy for defect severity — deeper crack → stronger piezo response → higher M:', formula: 'M = (A_max − A_min) / (A_max + A_min)' },
-                        { label: 'Frequency deviation Δf', body: 'Crack alters acoustic propagation, shifting sidebands from expected position:', formula: 'f_sideband = f_carrier ± (f_mod + Δf)' },
+                        { label: 'Carrier confirmation',   body: '915 MHz peak confirms the patch is powered and MOSFET is ON.', formula: null },
+                        { label: 'Sideband detection',     body: 'MOSFET toggling modulates the backscatter, producing sidebands at:', formula: 'f_carrier ± f_mod' },
+                        { label: 'Frequency deviation Δf', body: 'Crack shifts sidebands from their expected position:', formula: 'f_sideband = f_carrier ± (f_mod + Δf)' },
                       ].map((item, i) => (
                         <motion.div key={i}
                           initial={{ opacity: 0, y: 18 }}
@@ -926,7 +925,7 @@ export default function Product() {
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col gap-7">
                     <div>
-                      <p className="text-lg text-ink-muted leading-relaxed">Short-Time Fourier Transform (STFT) — overlapping windowed frames, each FFT'd independently. Output: 2D frequency-vs-time map with amplitude encoded as colour.</p>
+                      <p className="text-lg text-ink-muted leading-relaxed">STFT on overlapping windowed frames. Output: 2D frequency-vs-time map with amplitude encoded as colour.</p>
                     </div>
                     <motion.div
                       initial={{ opacity: 0, y: 12 }}

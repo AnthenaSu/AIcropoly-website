@@ -160,7 +160,7 @@ function HowItWorks() {
             exit={{ opacity: 0, x: dir * -60 }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="font-mono text-[clamp(4rem,10vw,9rem)] font-bold text-fg/6 leading-none select-none mb-6">
+            <p className="font-mono text-[clamp(4rem,10vw,9rem)] font-bold text-fg/20 leading-none select-none mb-6">
               {STEPS[step].num}
             </p>
             <h3 className="font-display font-semibold text-fg text-2xl md:text-4xl tracking-tight mb-5">
@@ -269,6 +269,16 @@ export default function Home() {
               </Link>
             </div>
           </div>
+        </motion.div>
+      </section>
+
+      {/* ── Motivation ── */}
+      <section className={WRAP} style={sb}>
+        <motion.div variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-3xl mx-auto text-center">
+          <h2 className="font-display font-semibold text-fg text-4xl md:text-5xl tracking-tight mb-8">Why It Matters</h2>
+          <p className="text-fg-muted text-lg md:text-xl leading-relaxed">
+            Conventional pipeline inspection sends FIFO crews into extreme, remote, and hazardous conditions. Our system replaces them entirely — autonomous drones, passive sensors, and AI deliver the same insight without putting anyone in the field. The result: 71% lower inspection costs, faster turnaround, and a biodegradable sensor material that leaves no toxic footprint.
+          </p>
         </motion.div>
       </section>
 

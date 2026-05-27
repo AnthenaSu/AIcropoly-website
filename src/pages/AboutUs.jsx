@@ -3,6 +3,8 @@ import unswBg from '../assets/unsw.jpeg'
 import anthenaImg from '../assets/anthena.jpg'
 import ianImg from '../assets/ian.jpg'
 import chrisImg from '../assets/chris.jpg'
+import kshitijImg from '../assets/Kshitij Srivastava.jpeg'
+import sukhmaniImg from '../assets/Sukhmani Kaur.jpeg'
 
 const rise = (delay = 0) => ({
   hidden: { opacity: 0, y: 24 },
@@ -36,11 +38,11 @@ function ImgCard({ label, img, className = '' }) {
 }
 
 const TEAM = [
-  { name: 'Chris', img: chrisImg, dept: 'Mechanical Engineering' },
-  { name: '[Name]', dept: 'Electrical Engineering' },
-  { name: '[Name]', dept: 'Computer Science' },
-  { name: 'Ian',     img: ianImg },
-  { name: 'Anthena', img: anthenaImg },
+  { name: 'Chris Huang',        img: chrisImg,    role: 'Material Science Engineer' },
+  { name: 'Kshitij Srivastava', img: kshitijImg,  role: 'Material Science Engineer' },
+  { name: 'Sukhmani Kaur',      img: sukhmaniImg, role: 'Material Science Engineer' },
+  { name: 'Ian Lin',            img: ianImg,      role: 'AI Engineer' },
+  { name: 'Anthena Su',         img: anthenaImg,  role: 'Drone Engineer' },
 ]
 
 const WRAP = 'max-w-7xl mx-auto px-12 md:px-24'
@@ -96,6 +98,7 @@ export default function AboutUs() {
                 className="aspect-[3/4] mb-7 transition-transform duration-500 group-hover:scale-[1.02]"
               />
               <p className="font-display font-semibold text-fg text-xl tracking-tight">{member.name}</p>
+              <p className="font-mono text-xs tracking-widest uppercase text-fg-muted/60 mt-1">{member.role}</p>
             </motion.div>
           ))}
         </div>
@@ -112,6 +115,7 @@ export default function AboutUs() {
                 className="aspect-[3/4] mb-7 transition-transform duration-500 group-hover:scale-[1.02]"
               />
               <p className="font-display font-semibold text-fg text-xl tracking-tight">{member.name}</p>
+              <p className="font-mono text-xs tracking-widest uppercase text-fg-muted/60 mt-1">{member.role}</p>
             </motion.div>
           ))}
         </div>
