@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import logoOnly from '../assets/nobackgroundlogo.png'
+import logoOnly from '../assets/logoonly.png'
 
 export default function Footer() {
   return (
