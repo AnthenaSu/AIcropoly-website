@@ -127,9 +127,6 @@ export default function Market() {
         <div className="absolute inset-0 bg-ink/60" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.div variants={rise(0.1)} initial="hidden" animate="visible" className="mb-8">
-            <span className="font-mono text-xs tracking-widest uppercase px-4 py-1.5 rounded-full bg-buckram/20 text-buckram border border-buckram/30">
-              For Investors
-            </span>
           </motion.div>
           <motion.h1
             variants={rise(0.25)} initial="hidden" animate="visible"
