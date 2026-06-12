@@ -7,7 +7,7 @@ import corrosion1 from '../assets/pipelinecorrosion1.jpg'
 import corrosion2 from '../assets/pipelinecorrosion2.jpeg'
 import corrosion3 from '../assets/pipelinecorrosion3.jpg'
 import sensorPatch from '../assets/sensor-patch.png'
-import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
+import howitworks0 from '../assets/howitworks0.png'
 import materialsciencehomepage from '../assets/materialsciencehomepage.png'
 import aimain from '../assets/aimainpage.jpg'
 
@@ -209,7 +209,7 @@ export default function Home() {
             {
               tag: 'Drone + SDR', color: 'text-ruskin',
               label: 'Non-contact sensing system',
-              img: spectrogramDiagram,
+              img: howitworks0,
               imgClass: 'object-cover',
               body: 'A drone transmits a 915 MHz carrier to our passive sensor patch. The SDR captures the backscatter as IQ samples — encoding the full structural state of the pipe wall, wirelessly and in real time.',
               stats: ['IQ data acquisition', 'Zero infrastructure', 'Fly-over inspection'],
