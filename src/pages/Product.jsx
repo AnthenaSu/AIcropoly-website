@@ -47,7 +47,7 @@ export default function Product() {
       </section>
 
       {/* ── Financial Impact ── */}
-      <section data-nav-dark className="h-screen w-full bg-[#0E0C0A] flex flex-col justify-center overflow-hidden" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
+      <section data-nav-dark className="min-h-screen w-full bg-[#0E0C0A] flex flex-col justify-center overflow-hidden py-24" style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}>
         <div className={WRAP}>
           <motion.p
             variants={rise(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
@@ -55,7 +55,7 @@ export default function Product() {
           >
             Business Impact
           </motion.p>
-          <div className="grid grid-cols-3 gap-12 md:gap-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-20">
             {[
               {
                 stat: '$130k – $349k',
@@ -116,7 +116,7 @@ export default function Product() {
           >
             Wrap.<br />Fly.<br />Know.
           </motion.h2>
-          <div className="grid grid-cols-3 gap-12 md:gap-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-20">
             {[
               {
                 num: '01',
@@ -166,7 +166,7 @@ export default function Product() {
       {/* ── Product Visual ── */}
       <section data-nav-dark className="bg-[#131110] overflow-hidden relative" style={{ ...syLg, scrollSnapAlign: 'start' }}>
         <div className={`relative ${WRAP}`}>
-          <div className="grid grid-cols-[1fr_1fr] gap-20 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
             <motion.div
               variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="flex flex-col gap-8"

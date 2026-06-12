@@ -142,7 +142,7 @@ export default function Home() {
 
       {/* ── Metrics ── */}
       <section className={WRAP} style={sy}>
-        <div className="grid grid-cols-3 gap-8 md:gap-16 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 text-center">
           {METRICS.map(({ to, decimals, prefix, suffix, label, color }, i) => (
             <motion.div key={i} variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <p className={`font-display font-bold text-5xl md:text-7xl leading-none mb-3 ${color}`}>
