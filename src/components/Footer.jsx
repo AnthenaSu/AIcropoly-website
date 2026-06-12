@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
+import logoOnly from '../assets/nobackgroundlogo.png'
 
 export default function Footer() {
   return (
     <footer className="bg-parchment text-fg-muted py-14 px-12 md:px-24">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
         <div>
-          <p className="font-hero font-semibold text-2xl tracking-widest uppercase text-fg mb-1">VEINPULSE</p>
+          <div className="flex items-center gap-2 mb-2">
+            <img src={logoOnly} alt="VeinPulse" className="h-8 w-auto object-contain" />
+            <p className="font-hero font-semibold text-2xl tracking-widest uppercase text-fg">VEINPULSE</p>
+          </div>
           <p className="font-mono text-xs text-fg-muted tracking-widest uppercase">
             Pipeline Integrity Technology
           </p>

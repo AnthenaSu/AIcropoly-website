@@ -127,6 +127,9 @@ export default function Market() {
         <div className="absolute inset-0 bg-ink/60" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
           <motion.div variants={rise(0.1)} initial="hidden" animate="visible" className="mb-8">
+            <span className="font-mono text-xs tracking-widest uppercase px-4 py-1.5 rounded-full bg-buckram/20 text-buckram border border-buckram/30">
+              For Investors
+            </span>
           </motion.div>
           <motion.h1
             variants={rise(0.25)} initial="hidden" animate="visible"
@@ -140,6 +143,17 @@ export default function Market() {
           >
             ASME IPC 2024 · IEA Global Hydrogen Review 2025
           </motion.p>
+          <motion.div
+            variants={rise(0.55)} initial="hidden" animate="visible"
+            className="mt-10"
+          >
+            <a
+              href="mailto:info@bernardinemountain.com"
+              className="px-8 py-4 bg-buckram text-[#0E0C0A] font-mono text-sm tracking-widest uppercase font-semibold rounded-full hover:bg-buckram/85 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
+            >
+              Inquire for Investment
+            </a>
+          </motion.div>
         </div>
       </section>
 
@@ -154,11 +168,11 @@ export default function Market() {
           <div className="max-w-3xl mx-auto mb-28 flex flex-col gap-8 text-center">
             <motion.p variants={rise(0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="text-[#F2E8D8]/80 text-2xl leading-relaxed">
-              Hydrogen embrittlement is invisible, fast, and fatal. When hydrogen molecules penetrate steel pipe walls, they accelerate crack growth by up to 100× compared to natural gas — and by the time conventional tools detect a fracture, it has already propagated beyond the point of safe operation.
+              Structural degradation is invisible, fast, and unforgiving. Whether driven by Corrosion Under Insulation (CUI), high-stress slurry wear, or extreme environmental cycling, micro-cracks develop silently inside steel pipe walls. By the time conventional, manual testing tools detect a fracture, the damage has often propagated beyond the point of safe operation—triggering catastrophic leaks, unplanned shutdowns, and massive OPEX bleed.
             </motion.p>
             <motion.p variants={rise(0.2)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="text-[#F2E8D8]/80 text-2xl leading-relaxed">
-              The global pipeline industry is about to deploy 37,000 km of hydrogen infrastructure. Not a single commercial monitoring solution exists that can reliably detect these cracks before failure. Regulators have noticed. Standards are being rewritten. The window to define what "safe" looks like is open right now.
+              The global resources and energy sectors spend billions annually on reactive, FIFO-dependent inspection routines that still leave massive temporal blind spots. Not a single commercial solution exists that offers continuous, battery-free structural monitoring at scale. As asset integrity regulations tighten across the board, the industry is demanding a shift from reactive repairs to predictive safety. The window to redefine what "reliable" looks like is open right now.
             </motion.p>
           </div>
 
@@ -442,16 +456,47 @@ export default function Market() {
         </motion.div>
       </section> */}
 
-      {/* CTA */}
-      <section className={WRAP} style={{ paddingTop: '2rem', paddingBottom: '9rem' }}>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-10 text-center">
-          <p className="font-display font-semibold text-fg text-2xl md:text-3xl tracking-tight">See the technology behind the numbers.</p>
-          <Link
-            to="/product"
-            className="font-mono text-sm tracking-widest uppercase text-fg/70 hover:text-buckram transition-all duration-300 px-5 py-2.5 rounded-full bg-fg/5 backdrop-blur-sm border border-fg/20 hover:bg-buckram/10 hover:border-buckram/30 shrink-0"
+      {/* ── Footer CTA ── */}
+      <section className="bg-[#0E0C0A] overflow-hidden relative" style={{ paddingTop: '10rem', paddingBottom: '10rem' }}>
+        <div className={`relative ${WRAP} flex flex-col items-center text-center`}>
+          <motion.p
+            variants={rise(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="font-mono text-xs tracking-widest uppercase text-[#F2E8D8]/40 mb-8"
           >
-            Our Product →
-          </Link>
+            For Investors
+          </motion.p>
+          <motion.h2
+            initial={{ clipPath: 'inset(0 0 100% 0)', skewY: 2 }}
+            whileInView={{ clipPath: 'inset(0 0 -30% 0)', skewY: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.5rem,6vw,6rem)] leading-[1.05] tracking-tight max-w-3xl mb-8"
+          >
+            The infrastructure gap is real. The window is now.
+          </motion.h2>
+          <motion.p
+            variants={rise(0.25)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="font-mono text-sm text-[#F2E8D8]/50 tracking-widest max-w-lg mb-14"
+          >
+            Connect with our team to discuss funding rounds, pilot partnerships, and our commercialisation roadmap.
+          </motion.p>
+          <motion.div
+            variants={rise(0.35)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            className="flex flex-col items-center gap-6"
+          >
+            <a
+              href="mailto:info@bernardinemountain.com"
+              className="px-10 py-4 bg-buckram text-[#0E0C0A] font-mono text-sm tracking-widest uppercase font-semibold rounded-full hover:bg-buckram/85 transition-all duration-300"
+            >
+              Inquire for Investment
+            </a>
+            <Link
+              to="/product"
+              className="font-mono text-xs text-[#F2E8D8]/35 tracking-widest hover:text-[#F2E8D8]/60 transition-colors duration-300"
+            >
+              Asset Owner? View Our Solution →
+            </Link>
+          </motion.div>
         </div>
       </section>
 

@@ -20,10 +20,6 @@ export default function Product() {
         <div className="absolute inset-0 bg-ink/45" />
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,0,0,0.55) 0%, transparent 100%)' }} />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-          <motion.p
-            variants={rise(0.15)} initial="hidden" animate="visible"
-            className="font-mono text-xs tracking-widest uppercase text-[#F2E8D8]/60 mb-6"
-          >          </motion.p>
           <motion.h1
             variants={rise(0.3)} initial="hidden" animate="visible"
             className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.8rem,7vw,7.5rem)] leading-[1.1] tracking-tight max-w-4xl [text-shadow:0_2px_4px_rgba(0,0,0,0.9),0_8px_40px_rgba(0,0,0,0.8)]"
@@ -34,7 +30,7 @@ export default function Product() {
             variants={rise(0.45)} initial="hidden" animate="visible"
             className="mt-8 font-mono text-lg text-[#F2E8D8]/80 tracking-widest max-w-xl [text-shadow:0_2px_12px_rgba(0,0,0,0.8)]"
           >
-            Detect pipe defects before they cascade into shutdowns.<br />One drone pass. Zero contact.
+            Detect pipe defects before they cascade <span style={{ whiteSpace: 'nowrap' }}>into shutdowns.</span><br />One drone pass. Zero contact.
           </motion.p>
           <motion.div
             variants={rise(0.6)} initial="hidden" animate="visible"
@@ -45,12 +41,6 @@ export default function Product() {
               className="px-8 py-4 bg-buckram text-[#0E0C0A] font-mono text-sm tracking-widest uppercase font-semibold rounded-full hover:bg-buckram/85 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
             >
               Book a Consultation
-            </a>
-            <a
-              href="mailto:info@bernardinemountain.com"
-              className="px-8 py-4 border border-[#F2E8D8]/60 text-[#F2E8D8] font-mono text-sm tracking-widest uppercase rounded-full hover:border-[#F2E8D8] transition-all duration-300 backdrop-blur-md bg-black/30 shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
-            >
-              Inquire for Investment
             </a>
           </motion.div>
         </div>
@@ -85,7 +75,7 @@ export default function Product() {
                 stat: '100%',
                 unit: 'compliant',
                 label: 'Green & ESG ready',
-                body: 'No batteries. No chemicals. No emissions. Meets green-bond requirements and environmental standards out of the box.',
+                body: 'No batteries. No environment harmful chemiclas. No emissions. Meets green-bond requirements and environmental standards out of the box.',
                 delay: 0.3,
               },
             ].map((item, i) => (
@@ -239,11 +229,11 @@ export default function Product() {
             variants={rise(0.25)} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="font-mono text-sm text-[#F2E8D8]/50 tracking-widest max-w-lg mb-14"
           >
-            Talk to our team about a pilot programme, or connect with us about investment opportunities.
+            Talk to our team about a pilot programme — we'll scope a deployment for your pipeline corridor.
           </motion.p>
           <motion.div
             variants={rise(0.35)} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="flex flex-col sm:flex-row gap-4 items-center justify-center"
+            className="flex flex-col items-center gap-6"
           >
             <a
               href="mailto:info@bernardinemountain.com"
@@ -252,10 +242,10 @@ export default function Product() {
               Book a Consultation
             </a>
             <a
-              href="mailto:info@bernardinemountain.com"
-              className="px-10 py-4 border border-[#F2E8D8]/30 text-[#F2E8D8]/70 font-mono text-sm tracking-widest uppercase rounded-full hover:border-[#F2E8D8]/70 hover:text-[#F2E8D8] transition-all duration-300"
+              href="/market"
+              className="font-mono text-xs text-[#F2E8D8]/35 tracking-widest hover:text-[#F2E8D8]/60 transition-colors duration-300"
             >
-              Inquire for Investment
+              Investor? View Market Opportunity →
             </a>
           </motion.div>
         </div>

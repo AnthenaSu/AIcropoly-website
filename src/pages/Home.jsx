@@ -7,7 +7,7 @@ import corrosion1 from '../assets/pipelinecorrosion1.jpg'
 import corrosion2 from '../assets/pipelinecorrosion2.jpeg'
 import corrosion3 from '../assets/pipelinecorrosion3.jpg'
 import sensorPatch from '../assets/sensor-patch.png'
-import howitworks1 from '../assets/howitworks1.png'
+import howitworks0 from '../assets/howitworks0.png'
 import spectrogramDiagram from '../assets/Spectrogramdiagram.jpg'
 import materialsciencehomepage from '../assets/materialsciencehomepage.png'
 import aimain from '../assets/aimainpage.jpg'
@@ -99,109 +99,6 @@ function CorrosionCarousel() {
   )
 }
 
-const STEPS = [
-  {
-    num: '01',
-    title: 'Install Sensor Patch',
-    body: 'Bond the ultra-thin PLLA piezoelectric film to the pipe exterior. Passive and always-on — no battery, no wiring, no pipe shutdown required.',
-  },
-  {
-    num: '02',
-    title: 'Drone Deployment',
-    body: 'An autonomous drone is launched to fly the pipeline corridor, covering remote and inaccessible terrain without field personnel.',
-  },
-  {
-    num: '03',
-    title: 'RF Activation',
-    body: 'The drone transmits a 915 MHz carrier signal to wirelessly excite the passive sensor patch from the air.',
-  },
-  {
-    num: '04',
-    title: 'IQ Data Capture',
-    body: 'The SDR on-board captures the acoustic backscatter as raw IQ samples, encoding the full structural state of the pipe wall in real time.',
-  },
-  {
-    num: '05',
-    title: 'Spectrogram Processing',
-    body: 'IQ data is converted to time-frequency spectrograms via Short-Time Fourier Transform (STFT), revealing the acoustic signature of any defect.',
-  },
-  {
-    num: '06',
-    title: 'AI Classification & Report',
-    body: 'Our trained model classifies defect type, location, and severity. Output: a colour-coded GPS health map ready for engineering review.',
-  },
-]
-
-function HowItWorks() {
-  const [step, setStep] = useState(0)
-  const [dir, setDir] = useState(1)
-
-  const go = (d) => {
-    setDir(d)
-    setStep(s => Math.max(0, Math.min(STEPS.length - 1, s + d)))
-  }
-
-  return (
-    <section className={WRAP} style={sy}>
-      <motion.h2
-        variants={rise()} initial="hidden" whileInView="visible" viewport={{ once: true }}
-        className="font-display font-semibold text-fg text-4xl md:text-5xl tracking-tight mb-14"
-      >
-        How It Works
-      </motion.h2>
-
-      <div className="relative bg-card/60 backdrop-blur-sm border border-border/60 rounded-3xl overflow-hidden min-h-[340px] flex flex-col justify-between p-10 sm:p-14 md:p-20">
-        <AnimatePresence mode="wait" custom={dir}>
-          <motion.div
-            key={step}
-            custom={dir}
-            initial={{ opacity: 0, x: dir * 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: dir * -60 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="font-mono text-[clamp(4rem,10vw,9rem)] font-bold text-fg/20 leading-none select-none mb-6">
-              {STEPS[step].num}
-            </p>
-            <h3 className="font-display font-semibold text-fg text-2xl md:text-4xl tracking-tight mb-5">
-              {STEPS[step].title}
-            </h3>
-            <p className="text-fg-muted text-base md:text-lg leading-relaxed max-w-2xl">
-              {STEPS[step].body}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="flex items-center justify-between mt-12">
-          <div className="flex gap-2">
-            {STEPS.map((_, i) => (
-              <button key={i} onClick={() => { setDir(i > step ? 1 : -1); setStep(i) }}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === step ? 'bg-fg scale-125' : 'bg-fg/20'}`}
-              />
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <p className="font-mono text-xs text-fg-muted/50 tracking-widest">{step + 1} / {STEPS.length}</p>
-            <button
-              onClick={() => go(-1)}
-              disabled={step === 0}
-              className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-fg/60 hover:text-fg hover:border-fg/30 transition-all duration-200 disabled:opacity-25 disabled:cursor-not-allowed"
-            >
-              ←
-            </button>
-            <button
-              onClick={() => go(1)}
-              disabled={step === STEPS.length - 1}
-              className="w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-fg/60 hover:text-fg hover:border-fg/30 transition-all duration-200 disabled:opacity-25 disabled:cursor-not-allowed"
-            >
-              →
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 export default function Home() {
   const heroRef = useRef(null)
@@ -228,10 +125,20 @@ export default function Home() {
           >
           </motion.div>
           <h1 className="font-hero font-semibold text-[#F2E8D8] text-[clamp(3rem,8vw,8rem)] leading-[1.05] tracking-wide max-w-4xl [text-shadow:0_4px_40px_rgba(0,0,0,0.7),0_2px_12px_rgba(0,0,0,0.5)]">
-            <span className="block"><WordReveal text="Listening to" delay={0.25} /></span>
-            <span className="block"><WordReveal text="What Lies Beneath" delay={0.5} /></span>
+            <span className="block"><WordReveal text="Eliminating Pipeline" delay={0.25} /></span>
+            <span className="block"><WordReveal text="Blind Spots" delay={0.5} /></span>
           </h1>
         </div>
+      </section>
+
+      {/* ── Intro text ── */}
+      <section className={WRAP} style={{ paddingTop: '5rem', paddingBottom: '0' }}>
+        <motion.p
+          variants={rise(0)} initial="hidden" whileInView="visible" viewport={{ once: true }}
+          className="text-center text-fg text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto"
+        >
+          Continuous, battery-free structural monitoring for extreme industrial environments. We turn CUI and micro-cracks into predictable intelligence before failures occur.
+        </motion.p>
       </section>
 
       {/* ── Metrics ── */}
@@ -303,7 +210,7 @@ export default function Home() {
             {
               tag: 'Drone + SDR', color: 'text-ruskin',
               label: 'Non-contact sensing system',
-              img: howitworks1,
+              img: howitworks0,
               imgClass: 'object-cover',
               body: 'A drone transmits a 915 MHz carrier to our passive sensor patch. The SDR captures the backscatter as IQ samples — encoding the full structural state of the pipe wall, wirelessly and in real time.',
               stats: ['IQ data acquisition', 'Zero infrastructure', 'Fly-over inspection'],
@@ -330,20 +237,12 @@ export default function Home() {
                 </div>
               </div>
               <h3 className={`font-display font-semibold text-2xl tracking-tight mb-3 ${item.color}`}>{item.tag}</h3>
-              <p className="text-base text-fg-muted mb-5 leading-relaxed">{item.body}</p>
-              <div className="flex flex-col gap-1.5 mt-auto">
-                {item.stats.map((s, j) => (
-                  <p key={j} className="font-mono text-xs text-fg-muted/60 tracking-widest uppercase flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-fg-muted/40 inline-block" />{s}
-                  </p>
-                ))}
-              </div>
+              <p className="text-base text-fg-muted leading-relaxed">{item.body}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      <HowItWorks />
 
       {/* ── Wide image + statement ── */}
       <section className={WRAP} style={sb}>
