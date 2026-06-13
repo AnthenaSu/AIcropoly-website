@@ -211,7 +211,7 @@ export default function Home() {
               label: 'Non-contact sensing system',
               img: howitworks0,
               imgClass: 'object-cover',
-              body: 'A drone transmits a 915 MHz carrier to our passive sensor patch. The SDR captures the backscatter as IQ samples — encoding the full structural state of the pipe wall, wirelessly and in real time.',
+              body: 'A drone passes over the pipeline and wirelessly interrogates our passive sensor patch — no contact, no shutdown, no ground infrastructure required. Full structural data is captured and transmitted in real time.',
               stats: ['IQ data acquisition', 'Zero infrastructure', 'Fly-over inspection'],
             },
             {
@@ -219,7 +219,7 @@ export default function Home() {
               label: 'Real-time defect classification',
               img: aimain,
               imgClass: 'object-cover object-center',
-              body: 'IQ data is converted to time-frequency spectrograms via STFT, then classified by our trained model. Output: a colour-coded pipeline health map with GPS-tagged defect locations and severity scores.',
+              body: 'Our AI processes the raw sensor signal and classifies defect type, location, and severity in minutes. Output: a colour-coded pipeline health map with GPS-tagged findings ready for your maintenance team.',
               stats: ['STFT spectrogram', 'Defect classification', 'GPS health map'],
             },
           ].map((item, i) => (
