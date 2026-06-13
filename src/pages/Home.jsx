@@ -127,6 +127,24 @@ export default function Home() {
             <span className="block"><WordReveal text="Eliminating Pipeline" delay={0.25} /></span>
             <span className="block"><WordReveal text="Blind Spots" delay={0.5} /></span>
           </h1>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.75, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-12 flex flex-col sm:flex-row gap-4 items-center justify-center"
+          >
+            <a
+              href="mailto:info@bernardinemountain.com"
+              className="px-8 py-4 bg-buckram text-[#0E0C0A] font-mono text-sm tracking-widest uppercase font-semibold rounded-full hover:bg-buckram/85 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
+            >
+              Book a Consultation
+            </a>
+            <a
+              href="mailto:info@bernardinemountain.com"
+              className="px-8 py-4 bg-transparent text-[#F2E8D8] font-mono text-sm tracking-widest uppercase font-semibold rounded-full border border-[#F2E8D8]/40 hover:bg-[#F2E8D8]/10 transition-all duration-300 shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
+            >
+              Inquire for Investment
+            </a>
+          </motion.div>
         </div>
       </section>
 
