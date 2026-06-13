@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import logoOnly from '../assets/logoonly.png'
+import newlogo from '../assets/newlogo.png'
 
 export default function Footer() {
   return (
@@ -7,8 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <img src={logoOnly} alt="VeinPulse" className="h-8 w-auto object-contain" />
-            <p className="font-hero font-semibold text-2xl tracking-widest uppercase text-fg">VEINPULSE</p>
+            <img src={newlogo} alt="VeinPulse" className="h-30 w-auto object-contain" />
           </div>
           <p className="font-mono text-xs text-fg-muted tracking-widest uppercase">
             Pipeline Integrity Technology

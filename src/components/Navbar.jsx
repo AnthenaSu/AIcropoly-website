@@ -55,7 +55,7 @@ export default function Navbar() {
           <img
             src={newlogo}
             alt="VeinPulse"
-            className="h-14 md:h-16 w-auto object-contain"
+            className="h-30 md:h-30 w-auto object-contain"
           />
         </Link>
 
