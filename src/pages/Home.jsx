@@ -10,6 +10,7 @@ import sensorPatch from '../assets/sensor-patch.png'
 import howitworks0 from '../assets/howitworks0.png'
 import materialsciencehomepage from '../assets/materialsciencehomepage.png'
 import aimain from '../assets/aimainpage.jpg'
+import newai from '../assets/newai.jpg'
 
 const CORROSION_IMGS = [corrosion1, corrosion2, corrosion3]
 
@@ -219,7 +220,7 @@ export default function Home() {
             {
               tag: 'Material Science', color: 'text-buckram',
               label: 'Acoustic signature research',
-              img: materialsciencehomepage,
+              img: newai,
               imgClass: 'object-cover',
               body: 'Each defect type — corrosion, stress cracking, hydrogen embrittlement — has a distinct acoustic signature. We characterised these responses across material samples to give our AI a physics-grounded training foundation.',
               stats: ['PLLA piezo film', '915 MHz carrier', 'Passive — no battery'],

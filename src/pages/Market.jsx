@@ -136,13 +136,13 @@ export default function Market() {
           </motion.h1>
           <motion.p
             variants={rise(0.4)} initial="hidden" animate="visible"
-            className="font-mono text-base text-[#F2E8D8]/70 mt-8 tracking-wide max-w-2xl"
+            className="font-mono text-base text-[#F2E8D8]/70 mt-8 tracking-wide max-w-3xl"
           >
             Zero battery-free inspection solutions.
           </motion.p>
           <motion.p
             variants={rise(0.5)} initial="hidden" animate="visible"
-            className="font-mono text-xs tracking-widest text-[#F2E8D8]/35 mt-4 uppercase"
+            className="font-mono text-xs tracking-widest text-[#F2E8D8]/50 mt-4 uppercase"
           >
             The hidden cost of Corrosion Under Insulation (CUI) and micro-cracks.
           </motion.p>
