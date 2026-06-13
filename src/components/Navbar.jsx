@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import logoOnly from '../assets/logoonly.png'
+import newlogo from '../assets/newlogo.png'
 
 const NAV_LINKS = [
   { to: '/about',   label: 'About Us' },
@@ -51,16 +51,12 @@ export default function Navbar() {
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-12 md:px-24 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center">
           <img
-            src={logoOnly}
+            src={newlogo}
             alt="VeinPulse"
-            className="h-14 w-auto object-contain"
-            style={{ mixBlendMode: 'multiply' }}
+            className="h-10 md:h-12 w-auto object-contain"
           />
-          <span className={`font-hero font-semibold text-lg tracking-widest uppercase transition-colors duration-300 ${dark ? 'text-[#F2E8D8]' : 'text-fg'}`}>
-            VEINPULSE
-          </span>
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
