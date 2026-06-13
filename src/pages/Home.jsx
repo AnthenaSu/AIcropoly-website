@@ -246,7 +246,7 @@ export default function Home() {
               variants={rise(i * 0.1)} initial="hidden" whileInView="visible" viewport={{ once: true }}
               className="group cursor-default hover:-translate-y-1 transition-transform duration-500 flex flex-col"
             >
-              <div className="relative overflow-hidden rounded-3xl aspect-[3/4] mb-6 transition-transform duration-500 group-hover:scale-[1.02] bg-card/60 border border-border/60">
+              <div className="relative overflow-hidden rounded-3xl aspect-[2/3] mb-6 transition-transform duration-500 group-hover:scale-[1.02] bg-card/60 border border-border/60">
                 <img src={item.img} alt={item.label} className={`w-full h-full ${item.imgClass}`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 <div className="absolute bottom-5 left-5">
