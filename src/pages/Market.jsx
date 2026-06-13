@@ -132,13 +132,19 @@ export default function Market() {
             variants={rise(0.25)} initial="hidden" animate="visible"
             className="font-display font-semibold text-[#F2E8D8] text-[clamp(2.4rem,6vw,6.5rem)] leading-[1.02] tracking-tight max-w-5xl"
           >
-            37,000 km of hydrogen pipelines.<br />Zero inspection solutions.
+            Billions lost to unplanned pipeline failures.
           </motion.h1>
           <motion.p
             variants={rise(0.4)} initial="hidden" animate="visible"
-            className="font-mono text-sm tracking-widest text-[#F2E8D8]/50 mt-10 uppercase"
+            className="font-mono text-base text-[#F2E8D8]/70 mt-8 tracking-wide max-w-2xl"
           >
-            ASME IPC 2024 · IEA Global Hydrogen Review 2025
+            Zero battery-free inspection solutions.
+          </motion.p>
+          <motion.p
+            variants={rise(0.5)} initial="hidden" animate="visible"
+            className="font-mono text-xs tracking-widest text-[#F2E8D8]/35 mt-4 uppercase"
+          >
+            The hidden cost of Corrosion Under Insulation (CUI) and micro-cracks.
           </motion.p>
           <motion.div
             variants={rise(0.55)} initial="hidden" animate="visible"
