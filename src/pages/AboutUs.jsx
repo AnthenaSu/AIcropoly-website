@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import unswBg from '../assets/unsw.jpeg'
 import anthenaImg from '../assets/anthena.jpg'
-import ianImg from '../assets/ian.jpg'
+import stevenImg from '../assets/steven.jpg'
 import chrisImg from '../assets/chris.jpg'
 import kshitijImg from '../assets/Kshitij Srivastava.jpeg'
 import sukhmaniImg from '../assets/Sukhmani Kaur.jpeg'
@@ -41,7 +41,7 @@ const TEAM = [
   { name: 'Chris Huang',        img: chrisImg,    role: 'Material Science Engineer' },
   { name: 'Kshitij Srivastava', img: kshitijImg,  role: 'Material Science Engineer' },
   { name: 'Sukhmani Kaur',      img: sukhmaniImg, role: 'Material Science Engineer' },
-  { name: 'Ian Lin',            img: ianImg,      role: 'AI Engineer' },
+  { name: 'Steven Lin',         img: stevenImg,   role: 'Mechanical Engineer' },
   { name: 'Anthena Su',         img: anthenaImg,  role: 'Drone Engineer' },
 ]
 
